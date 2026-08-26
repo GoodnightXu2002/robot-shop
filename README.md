@@ -181,6 +181,16 @@ python app.py
 python scripts/check_project.py
 ```
 
+## Production Deployment
+
+生产环境采用 Nginx 反向代理与 systemd 管理的 Gunicorn 服务：
+
+```text
+Internet → Nginx → Gunicorn → Flask → SQLite
+```
+
+可复用的 systemd 与 Nginx 示例配置位于 [`deploy/`](deploy/)。生产环境变量通过未纳入版本控制的 `.env` 提供。
+
 ## 环境变量
 
 | 变量 | 说明 |

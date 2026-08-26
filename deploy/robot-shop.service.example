@@ -1,0 +1,14 @@
+[Unit]
+Description=Robot Shop Gunicorn Service
+After=network.target
+
+[Service]
+User=robotshop
+Group=robotshop
+WorkingDirectory=/var/www/robot-shop/app
+EnvironmentFile=/var/www/robot-shop/app/.env
+ExecStart=/var/www/robot-shop/venv/bin/gunicorn --bind 127.0.0.1:8000 --workers 1 --threads 4 --worker-class gthread --timeout 60 --no-control-socket app:app
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
