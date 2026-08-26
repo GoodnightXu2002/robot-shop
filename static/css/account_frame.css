@@ -1,0 +1,248 @@
+.site-body .account-page {
+    min-height: calc(100vh - 82px);
+    padding: 30px 0 64px;
+    color: #1f2937;
+    background: #f7f8fa;
+    --account-accent: #2563eb;
+    --account-accent-hover: #1746a2;
+}
+
+.site-body .account-container.account-container--wide {
+    width: min(calc(100% - 64px), 1376px);
+    max-width: 1376px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.site-body .account-container.account-container--narrow {
+    width: min(calc(100% - 64px), 1200px);
+    max-width: 1200px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.site-body .account-page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    margin-bottom: 24px;
+}
+
+.site-body .message-center-header {
+    grid-column: 1 / -1;
+    margin-bottom: 4px;
+}
+
+.site-body .account-page .account-page-title {
+    margin: 0;
+    color: #1f2937;
+    font-size: 30px;
+    font-weight: 750;
+    line-height: 1.25;
+    letter-spacing: -.025em;
+}
+
+.site-body .account-page .account-page-description {
+    max-width: 65ch;
+    margin: 8px 0 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.site-body .account-back-link {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 0 0 auto;
+    padding: 0 17px;
+    color: #5f6877;
+    border: 1px solid #d9dee7;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 160ms ease, border-color 160ms ease, background-color 160ms ease;
+}
+
+.site-body .account-back-link:hover {
+    color: var(--account-accent-hover);
+    border-color: #9db8ea;
+    background: #f8fbff;
+}
+
+.site-body .account-back-link:focus-visible {
+    outline: 2px solid var(--account-accent);
+    outline-offset: 2px;
+}
+
+.site-body .account-status {
+    display: inline-flex;
+    min-height: 28px;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 9px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.site-body .account-status.is-pending {
+    color: #9a5b00;
+    border-color: #f0d9aa;
+    background: #fff7e6;
+}
+
+.site-body .account-status.is-processing {
+    color: #1d4ed8;
+    border-color: #cfe0ff;
+    background: #eff6ff;
+}
+
+.site-body .account-status.is-completed {
+    color: #237a3b;
+    border-color: #cce9d5;
+    background: #ecf8f0;
+}
+
+.site-body .account-status.is-cancelled,
+.site-body .account-status.is-muted {
+    color: #5f6877;
+    border-color: #e2e8f0;
+    background: #f1f5f9;
+}
+
+.site-body .account-data-table th {
+    height: 52px;
+}
+
+.site-body .account-data-table td {
+    height: 88px;
+}
+
+.site-body .account-money {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.site-body .account-empty-state {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 32px 24px;
+    color: #64748b;
+    text-align: center;
+}
+
+.site-body .account-empty-state::before {
+    content: "—";
+    display: inline-flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    color: #7b8ba3;
+    border: 1px solid #dce3ec;
+    border-radius: 8px;
+    background: #f8fafc;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.site-body .account-empty-state strong,
+.site-body .account-empty-state h2 {
+    margin: 0;
+    color: #334155;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.site-body .account-empty-state p {
+    max-width: 48ch;
+    margin: 8px 0 0;
+    color: #7b8798;
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.site-body .account-empty-state a {
+    display: inline-flex;
+    min-height: 36px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 16px;
+    padding: 0 14px;
+    color: #2563eb;
+    border: 1px solid #b9cdf2;
+    border-radius: 5px;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 650;
+    text-decoration: none;
+}
+
+.site-body .account-empty-state a:hover {
+    color: #1746a2;
+    border-color: #9db8ea;
+    background: #f8fbff;
+}
+
+.site-body .account-empty-state a:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
+.site-body .account-empty-state--panel {
+    min-height: 220px;
+}
+
+.site-body .account-empty-state--compact {
+    min-height: 148px;
+    padding: 24px;
+}
+
+.site-body .user-compact-grid > .account-empty-state,
+.site-body .user-review-list > .account-empty-state {
+    grid-column: 1 / -1;
+}
+
+.site-body:has(.account-page) .site-footer {
+    display: none;
+}
+
+@media (max-width: 991.98px) {
+    .site-body .account-container.account-container--wide,
+    .site-body .account-container.account-container--narrow {
+        width: min(calc(100% - 36px), 760px);
+    }
+}
+
+@media (max-width: 575.98px) {
+    .site-body .account-page {
+        padding: 24px 0 44px;
+    }
+
+    .site-body .account-container.account-container--wide,
+    .site-body .account-container.account-container--narrow {
+        width: min(calc(100% - 24px), 540px);
+    }
+
+    .site-body .account-page-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 18px;
+    }
+}

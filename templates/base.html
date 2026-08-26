@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}机器人售卖网站{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ai_chat.css') }}">
+    {% block page_styles %}{% endblock %}
+</head>
+{% set is_admin_page = request.endpoint and request.endpoint.startswith('admin') %}
+{% set is_home_page = request.endpoint == 'index' %}
+{% set message_page_endpoints = ['messages', 'message_detail'] %}
+{% set cart_page_endpoints = ['cart'] %}
+{% set account_page_endpoints = ['user_center', 'orders', 'order_detail', 'payment'] %}
+<body class="{% if is_admin_page %}admin-body{% else %}site-body{% if is_home_page %} home-page{% endif %}{% endif %}">
+<nav class="navbar navbar-expand-lg {% if is_admin_page %}navbar-dark bg-primary admin-topbar{% else %}navbar-light bg-white{% endif %} sticky-top shadow-sm site-navbar">
+    <div class="{% if is_admin_page %}container-fluid px-4{% else %}container{% endif %}">
+        <a class="navbar-brand fw-bold" href="{{ url_for('admin_dashboard') if is_admin_page else url_for('index') }}">
+            {% if is_admin_page %}
+            <span class="brand-mark">R</span>
+            <span class="admin-brand-title">智联机器人商城后台</span>
+            {% else %}
+            <span class="brand-mark brand-mark-public" aria-hidden="true">
+                <svg class="brand-logo-icon" viewBox="0 0 32 32" focusable="false">
+                    <rect x="5.5" y="5.5" width="21" height="21" rx="5.5"></rect>
+                    <path d="M11.2 22V10.2h6.1c2.9 0 4.7 1.5 4.7 3.9s-1.8 3.9-4.7 3.9h-6.1"></path>
+                    <path d="M16.3 18l5.5 4"></path>
+                    <circle cx="17.2" cy="14.1" r="1.25"></circle>
+                </svg>
+            </span>
+            <span class="brand-name">智械机器人商城</span>
+            {% endif %}
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            {% if is_admin_page %}
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 admin-topbar-left">
+                <li class="nav-item"><span class="admin-system-label">后台管理系统</span></li>
+                <li class="nav-item"><a class="nav-link admin-return-link" href="{{ url_for('index') }}">返回前台</a></li>
+            </ul>
+            <ul class="navbar-nav ms-auto align-items-lg-center admin-topbar-right">
+                <li class="nav-item"><span class="navbar-text admin-user-greeting">您好，{{ current_user.username }}</span></li>
+                <li class="nav-item"><a class="btn btn-light btn-sm nav-action" href="{{ url_for('logout') }}">退出</a></li>
+            </ul>
+            {% else %}
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link{% if request.endpoint == 'index' %} active{% endif %}" href="{{ url_for('index') }}"{% if request.endpoint == 'index' %} aria-current="page"{% endif %}>首页</a></li>
+                <li class="nav-item"><a class="nav-link{% if request.endpoint in ['products', 'product_detail'] %} active{% endif %}" href="{{ url_for('products') }}"{% if request.endpoint in ['products', 'product_detail'] %} aria-current="page"{% endif %}>产品中心</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}#scenes">应用场景</a></li>
+                {% if current_user.is_authenticated and current_user.is_admin %}
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_dashboard') }}">后台管理</a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link{% if request.endpoint in ['appointments', 'consultations'] %} active{% endif %}" href="{{ url_for('appointments') }}"{% if request.endpoint in ['appointments', 'consultations'] %} aria-current="page"{% endif %}>服务支持</a></li>
+                {% if current_user.is_authenticated %}
+                <li class="nav-item d-lg-none"><a class="nav-link{% if request.endpoint in cart_page_endpoints %} active{% endif %}" href="{{ url_for('cart') }}"{% if request.endpoint in cart_page_endpoints %} aria-current="page"{% endif %}>购物车{% if cart_count %}({{ cart_count }}){% endif %}</a></li>
+                <li class="nav-item d-lg-none"><a class="nav-link{% if request.endpoint in account_page_endpoints %} active{% endif %}" href="{{ url_for('user_center') }}"{% if request.endpoint in account_page_endpoints %} aria-current="page"{% endif %}>用户中心</a></li>
+                <li class="nav-item d-lg-none"><a class="nav-link{% if request.endpoint in message_page_endpoints %} active{% endif %}" href="{{ url_for('messages') }}"{% if request.endpoint in message_page_endpoints %} aria-current="page"{% endif %}>消息通知{% if unread_user_notifications %}({{ unread_user_notifications }}){% endif %}</a></li>
+                {% endif %}
+                {% endif %}
+            </ul>
+            {% if current_user.is_authenticated %}
+            <ul class="navbar-nav ms-auto d-none d-lg-flex flex-row align-items-center public-header-actions" aria-label="用户快捷入口">
+                <li class="nav-item">
+                    <a class="header-icon-control{% if request.endpoint in message_page_endpoints %} is-active{% endif %}" href="{{ url_for('messages') }}" aria-label="消息通知{% if unread_user_notifications and unread_user_notifications > 0 %}，{{ unread_user_notifications }} 条未读{% endif %}" title="消息通知"{% if request.endpoint in message_page_endpoints %} aria-current="page"{% endif %}>
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                            <path d="M10 21h4"></path>
+                        </svg>
+                        {% if unread_user_notifications and unread_user_notifications > 0 %}
+                        <span class="header-count-badge" aria-hidden="true">{% if unread_user_notifications > 99 %}99+{% else %}{{ unread_user_notifications }}{% endif %}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <button class="header-icon-control header-user-toggle dropdown-toggle{% if request.endpoint in account_page_endpoints %} is-active{% endif %}" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="打开用户菜单{% if request.endpoint in account_page_endpoints %}，当前位于账户页面{% endif %}" title="用户菜单">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <circle cx="12" cy="8" r="4"></circle>
+                            <path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path>
+                        </svg>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end header-user-menu">
+                        <li><span class="dropdown-header">您好，{{ current_user.username }}</span></li>
+                        <li><a class="dropdown-item" href="{{ url_for('user_center') }}">用户中心</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">退出</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="header-icon-control{% if request.endpoint in cart_page_endpoints %} is-active{% endif %}" href="{{ url_for('cart') }}" aria-label="购物车{% if cart_count and cart_count > 0 %}，{{ cart_count }} 件商品{% endif %}" title="购物车"{% if request.endpoint in cart_page_endpoints %} aria-current="page"{% endif %}>
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M3 3h2l2.2 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.4L21 7H6"></path>
+                            <circle cx="9.5" cy="20" r="1.25"></circle>
+                            <circle cx="18" cy="20" r="1.25"></circle>
+                        </svg>
+                        {% if cart_count and cart_count > 0 %}
+                        <span class="header-count-badge" aria-hidden="true">{% if cart_count > 99 %}99+{% else %}{{ cart_count }}{% endif %}</span>
+                        {% endif %}
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto d-lg-none">
+                <li class="nav-item"><span class="navbar-text me-3">您好，{{ current_user.username }}</span></li>
+                <li class="nav-item"><a class="btn btn-light btn-sm nav-action" href="{{ url_for('logout') }}">退出</a></li>
+            </ul>
+            {% else %}
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                <li class="nav-item me-lg-2"><a class="btn btn-outline-light btn-sm nav-action" href="{{ url_for('login') }}">登录</a></li>
+                <li class="nav-item"><a class="btn btn-light btn-sm nav-action" href="{{ url_for('register') }}">注册</a></li>
+            </ul>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<main>
+    <div class="{% if is_admin_page %}admin-flash-stack{% elif is_home_page %}container home-flash-stack{% else %}container mt-3{% endif %}">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer mt-5">
+    <div class="container py-5">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <h5 class="fw-bold">智联机器人商城</h5>
+                <p class="mb-0">{% if is_home_page %}面向真实场景的机器人产品选购与企业服务平台。{% else %}Bootstrap结合Flask框架的机器人售卖网站设计与实现。{% endif %}</p>
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <h6 class="fw-bold">联系方式</h6>
+                <p class="mb-1">联系电话：400-800-2026</p>
+                <p class="mb-1">企业邮箱：service@robot-shop.local</p>
+                <p class="mb-0">地址：智能制造产业园 A 座</p>
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <h6 class="fw-bold">主营服务</h6>
+                <p class="mb-1">机器人产品售卖</p>
+                <p class="mb-1">售前方案咨询</p>
+                <p class="mb-0">安装调试与售后维护</p>
+            </div>
+            <div class="col-md-4 col-lg-2">
+                <h6 class="fw-bold">版权信息</h6>
+                <p class="mb-0">Copyright {{ now.year }} Robot Shop</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+{% if not is_admin_page %}
+<div class="ai-chat-widget" data-ai-chat>
+    <button class="ai-chat-toggle" type="button" data-ai-chat-toggle aria-label="打开AI智能客服助手" aria-expanded="false">
+        <span class="ai-chat-toggle-core">AI</span>
+        <span class="ai-chat-toggle-text">智能客服</span>
+    </button>
+    <section class="ai-chat-panel" data-ai-chat-panel aria-label="AI智能客服助手" aria-hidden="true">
+        <header class="ai-chat-header">
+            <div>
+                <p class="ai-chat-kicker mb-0">Robot Shop Assistant</p>
+                <h2 class="ai-chat-title mb-0">AI智能客服助手</h2>
+            </div>
+            <button class="ai-chat-close" type="button" data-ai-chat-close aria-label="关闭AI智能客服助手">×</button>
+        </header>
+        <div class="ai-chat-messages" data-ai-chat-messages>
+            <div class="ai-chat-message ai-chat-message-bot">
+                <div class="ai-chat-bubble">您好，我可以解答机器人产品、购物流程、订单状态、在线咨询、服务预约和售后维护等问题。</div>
+            </div>
+        </div>
+        <form class="ai-chat-form" data-ai-chat-form>
+            <input class="ai-chat-input" data-ai-chat-input type="text" maxlength="300" autocomplete="off" placeholder="请输入您的问题">
+            <button class="ai-chat-send" type="submit">发送</button>
+        </form>
+    </section>
+</div>
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function goBackOr(fallbackUrl) {
+    if (window.history.length > 1) {
+        window.history.back();
+    } else if (fallbackUrl) {
+        window.location.href = fallbackUrl;
+    }
+}
+</script>
+{% if not is_admin_page %}
+<script>
+(() => {
+    const primaryNav = document.querySelector('.site-navbar .navbar-collapse > .navbar-nav:first-child');
+    if (!primaryNav) return;
+
+    const homeLink = primaryNav.querySelector('a[href="{{ url_for('index') }}"]');
+    const scenesLink = primaryNav.querySelector('a[href$="#scenes"]');
+    if (!homeLink || !scenesLink || window.location.pathname !== homeLink.pathname) return;
+
+    const syncHomepageNavState = () => {
+        const scenesActive = window.location.hash === '#scenes';
+        homeLink.classList.toggle('active', !scenesActive);
+        scenesLink.classList.toggle('active', scenesActive);
+
+        if (scenesActive) {
+            homeLink.removeAttribute('aria-current');
+            scenesLink.setAttribute('aria-current', 'page');
+        } else {
+            scenesLink.removeAttribute('aria-current');
+            homeLink.setAttribute('aria-current', 'page');
+        }
+    };
+
+    syncHomepageNavState();
+    window.addEventListener('hashchange', syncHomepageNavState);
+})();
+</script>
+<script src="{{ url_for('static', filename='js/ai_chat.js') }}"></script>
+{% endif %}
+{% block page_scripts %}{% endblock %}
+</body>
+</html>

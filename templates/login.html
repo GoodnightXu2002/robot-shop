@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}用户登录 - 智联机器人商城{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-5">
+                <div class="auth-card">
+                    <h1 class="h3 fw-bold mb-2 text-center">登录系统</h1>
+                    <p class="text-muted text-center mb-4">普通用户和管理员使用同一入口登录。</p>
+                    <form method="post">
+                        <div class="mb-3">
+                            <label class="form-label" for="username">用户名</label>
+                            <input class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="password">密码</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <button class="btn btn-primary w-100" type="submit">登录</button>
+                    </form>
+                    <p class="text-center mt-3 mb-0">还没有账号？<a href="{{ url_for('register') }}">立即注册</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

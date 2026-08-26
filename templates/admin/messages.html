@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}消息通知 - 智联机器人商城{% endblock %}
+
+{% block content %}
+<section class="admin-shell">
+    <div class="container-fluid">
+        <div class="row g-0">
+            {% include "admin/_sidebar.html" %}
+            <div class="col-lg-10 admin-main">
+                <div class="admin-title">
+                    <div>
+                        <h1 class="fw-bold">消息通知</h1>
+                        <p>查看新用户、新订单、新咨询、新预约和待处理提醒。</p>
+                    </div>
+                </div>
+                <div class="admin-page-actions">
+                    <button type="button" class="btn btn-outline-secondary back-btn" onclick="goBackOr('{{ url_for('admin_dashboard') }}')">← 返回上一级</button>
+                </div>
+                <div class="content-panel">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                            <tr><th>状态</th><th>标题</th><th>内容</th><th>类型</th><th>时间</th><th>操作</th></tr>
+                            </thead>
+                            <tbody>
+                            {% for item in notifications %}
+                            <tr class="{% if item.is_read %}notification-read{% else %}notification-unread{% endif %}">
+                                <td><span class="badge status-badge">{{ "已读" if item.is_read else "未读" }}</span></td>
+                                <td><strong>{{ item.title }}</strong></td>
+                                <td class="notification-content">{{ item.content }}</td>
+                                <td>{{ item.type }}</td>
+                                <td>{{ item.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+                                <td>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        {% if item.link %}<a class="btn btn-sm btn-outline-primary" href="{{ item.link }}">查看/跳转</a>{% endif %}
+                                        {% if not item.is_read %}
+                                        <form method="post" action="{{ url_for('admin_mark_message_read', notification_id=item.id) }}">
+                                            <button class="btn btn-sm btn-primary" type="submit">标记已读</button>
+                                        </form>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="6" class="text-center py-5 text-muted">暂无后台消息。</td></tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

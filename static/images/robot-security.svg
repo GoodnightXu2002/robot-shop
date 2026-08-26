@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="Security inspection robot">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#dbeafe"/>
+      <stop offset="1" stop-color="#c7d2fe"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="420" fill="url(#bg)"/>
+  <rect x="190" y="122" width="260" height="210" rx="34" fill="#fff" stroke="#1e40af" stroke-width="10"/>
+  <rect x="238" y="62" width="164" height="84" rx="34" fill="#1e40af"/>
+  <circle cx="286" cy="105" r="12" fill="#fff"/>
+  <circle cx="354" cy="105" r="12" fill="#fff"/>
+  <path d="M320 178l70 28v50c0 44-32 74-70 92-38-18-70-48-70-92v-50z" fill="#bfdbfe" stroke="#2563eb" stroke-width="8"/>
+  <path d="M292 250l20 20 42-50" fill="none" stroke="#1e40af" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="260" cy="350" r="24" fill="#0f172a"/>
+  <circle cx="380" cy="350" r="24" fill="#0f172a"/>
+</svg>

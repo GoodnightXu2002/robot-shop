@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}产品管理 - 智联机器人商城{% endblock %}
+
+{% block content %}
+<section class="admin-shell">
+    <div class="container-fluid">
+        <div class="row g-0">
+            {% include "admin/_sidebar.html" %}
+            <div class="col-lg-10 admin-main">
+                <div class="admin-title">
+                    <button type="button" class="btn btn-outline-secondary back-btn" onclick="goBackOr('{{ url_for('admin_dashboard') }}')">← 返回上一级</button>
+                    <div><h1 class="fw-bold">产品管理</h1><p>管理产品信息、库存、销量、热门状态和上架状态。</p></div>
+                    <a class="btn btn-primary" href="{{ url_for('admin_product_new') }}">新增产品</a>
+                </div>
+                <div class="table-responsive bg-white rounded shadow-sm">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                        <tr><th>图片</th><th>名称</th><th>分类</th><th>价格</th><th>库存</th><th>销量</th><th>状态</th><th>操作</th></tr>
+                        </thead>
+                        <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td><img src="{{ url_for('static', filename=product.image) }}" class="admin-thumb" alt="{{ product.name }}"></td>
+                            <td>
+                                <strong>{{ product.name }}</strong>{% if product.is_hot %}<span class="badge text-bg-danger ms-1">热门</span>{% endif %}
+                                <div class="small text-muted">{{ product.brand or "品牌待补充" }} · {{ product.model or "型号待补充" }}</div>
+                            </td>
+                            <td>{{ product.category }}</td>
+                            <td>￥{{ "%.2f"|format(product.price) }}</td>
+                            <td>{{ product.stock }}</td>
+                            <td>{{ product.sales }}</td>
+                            <td><span class="badge {% if product.is_active %}text-bg-success{% else %}text-bg-secondary{% endif %}">{{ "上架" if product.is_active else "下架" }}</span></td>
+                            <td>
+                                <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin_product_edit', product_id=product.id) }}">编辑</a>
+                                <form class="d-inline" method="post" action="{{ url_for('admin_product_delete', product_id=product.id) }}" onsubmit="return confirm('确定删除该产品吗？');">
+                                    <button class="btn btn-sm btn-outline-danger" type="submit">删除</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="8" class="text-center py-4 text-muted">暂无产品。</td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

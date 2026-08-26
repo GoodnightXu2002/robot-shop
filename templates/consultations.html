@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+{% block title %}在线咨询 - 智联机器人商城{% endblock %}
+
+{% block content %}
+<section class="page-header page-header-with-action">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-start gap-4">
+            <div>
+                <span class="page-kicker">Consultation Center</span>
+                <h1 class="fw-bold">在线咨询中心</h1>
+                <p class="mb-0">查看常见问题、模拟客服对话，并提交正式咨询记录等待管理员回复。</p>
+            </div>
+            <button type="button" class="btn btn-outline-secondary back-btn" onclick="goBackOr('{{ url_for('index') }}')">← 返回上一级</button>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-3 align-items-start consultation-layout">
+            <div class="col-lg-5">
+                <div class="content-panel consult-block">
+                    <div class="panel-title-row">
+                        <div>
+                            <span class="panel-kicker">FAQ</span>
+                            <h2 class="h4 fw-bold mb-0">常见问题</h2>
+                        </div>
+                        <span class="badge status-badge">快速解答</span>
+                    </div>
+                    <input class="form-control mb-3" id="faqSearch" placeholder="搜索 FAQ，例如：售后、发货、维修">
+                    <div class="accordion faq-panel" id="faqAccordion">
+                        {% for question, answer in faq_items %}
+                        <div class="accordion-item faq-item" data-faq="{{ question }} {{ answer }}">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq{{ loop.index }}">
+                                    {{ question }}
+                                </button>
+                            </h3>
+                            <div id="faq{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">{{ answer }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="content-panel consult-block mt-4">
+                    <div class="panel-title-row">
+                        <div>
+                            <span class="panel-kicker">AI Service</span>
+                            <h2 class="h4 fw-bold mb-0">模拟实时客服</h2>
+                        </div>
+                        <span class="badge status-badge">在线</span>
+                    </div>
+                    <div class="chat-box consult-chat" id="chatBox">
+                        <div class="chat-bubble bot">您好，我是智能客服。您可以咨询价格、售后、发货、维修等问题。</div>
+                    </div>
+                    <div class="input-group mt-3">
+                        <input class="form-control" id="chatInput" placeholder="输入问题进行模拟对话">
+                        <button class="btn btn-primary" id="chatSend" type="button">发送</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="form-card consult-form-card">
+                    <div class="panel-title-row">
+                        <div>
+                            <span class="panel-kicker">Request</span>
+                            <h2 class="h4 fw-bold mb-0">提交咨询</h2>
+                        </div>
+                        <span class="badge status-badge">正式记录</span>
+                    </div>
+                    {% if source_from_ai %}
+                    <div class="alert alert-info">已根据 AI 客服对话生成咨询草稿，确认联系方式后即可提交给管理员。</div>
+                    {% endif %}
+                    <form method="post">
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label class="form-label" for="product_id">关联产品</label>
+                                <select class="form-select" id="product_id" name="product_id">
+                                    <option value="">不关联产品</option>
+                                    {% for product in products %}
+                                    <option value="{{ product.id }}" {% if selected_product_id == product.id %}selected{% endif %}>{{ product.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="name">联系人</label>
+                                <input class="form-control" id="name" name="name" value="{{ current_user.username }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="contact">联系电话</label>
+                                <input class="form-control" id="contact" name="contact" value="{{ current_user.phone or current_user.email or '' }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="title">咨询标题</label>
+                                <input class="form-control" id="title" name="title" value="{{ prefill_title }}" placeholder="例如：想了解送餐机器人报价" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" for="content">咨询内容</label>
+                                <textarea class="form-control" id="content" name="content" rows="4" placeholder="请描述采购场景、预算范围、服务需求等信息。" required>{{ prefill_content }}</textarea>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <button class="btn btn-primary px-4" type="submit">提交咨询</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="content-panel mt-4">
+                    <div class="panel-title-row">
+                        <div>
+                            <span class="panel-kicker">History</span>
+                            <h2 class="h4 fw-bold mb-0">进行中的咨询</h2>
+                        </div>
+                        <span class="badge status-badge">进行中 {{ active_consultations|length }} 条</span>
+                    </div>
+                    <div class="record-list compact-record-list">
+                        {% for item in active_consultations %}
+                        <div class="record-card consultation-record">
+                            <div class="d-flex justify-content-between gap-3">
+                                <div>
+                                    <h3 class="h5 fw-bold">{{ item.title }}</h3>
+                                    <p class="text-muted mb-2">{{ item.content }}</p>
+                                </div>
+                                <span class="badge status-badge align-self-start">{{ item.status }}</span>
+                            </div>
+                            <div class="record-meta">
+                                联系人：{{ item.name }}　电话：{{ item.contact }}　提交时间：{{ item.created_at.strftime("%Y-%m-%d %H:%M") }}
+                                {% if item.product %}<br>关联产品：<a href="{{ url_for('product_detail', product_id=item.product.id) }}">{{ item.product.name }}</a>{% endif %}
+                            </div>
+                            {% if item.admin_reply %}
+                            <div class="reply-box mt-3"><strong>管理员回复：</strong>{{ item.admin_reply }}</div>
+                            {% else %}
+                            <div class="reply-box muted-reply mt-3"><strong>回复状态：</strong>管理员暂未回复，请耐心等待。</div>
+                            {% endif %}
+                        </div>
+                        {% else %}
+                        <div class="empty-state">暂无进行中的咨询。</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="content-panel mt-4 archive-panel">
+                    <div class="panel-title-row">
+                        <div>
+                            <span class="panel-kicker">Archive</span>
+                            <h2 class="h4 fw-bold mb-0">已完成归档</h2>
+                        </div>
+                        <span class="badge status-badge">已归档 {{ archived_consultations|length }} 条</span>
+                    </div>
+                    <div class="accordion archive-accordion" id="consultationArchive">
+                        <div class="accordion-item">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#consultationArchiveBody">
+                                    查看历史咨询和管理员回复
+                                </button>
+                            </h3>
+                            <div id="consultationArchiveBody" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    <div class="record-list compact-record-list">
+                                        {% for item in archived_consultations %}
+                                        <div class="record-card consultation-record archived-record">
+                                            <div class="d-flex justify-content-between gap-3">
+                                                <div>
+                                                    <h3 class="h5 fw-bold">{{ item.title }}</h3>
+                                                    <p class="text-muted mb-2">{{ item.content }}</p>
+                                                </div>
+                                                <span class="badge status-badge align-self-start">{{ item.status }}</span>
+                                            </div>
+                                            <div class="record-meta">
+                                                联系人：{{ item.name }}　电话：{{ item.contact }}　提交时间：{{ item.created_at.strftime("%Y-%m-%d %H:%M") }}
+                                                {% if item.product %}<br>关联产品：<a href="{{ url_for('product_detail', product_id=item.product.id) }}">{{ item.product.name }}</a>{% endif %}
+                                            </div>
+                                            {% if item.admin_reply %}
+                                            <div class="reply-box mt-3"><strong>管理员回复：</strong>{{ item.admin_reply }}</div>
+                                            {% else %}
+                                            <div class="reply-box muted-reply mt-3"><strong>回复状态：</strong>暂无管理员回复。</div>
+                                            {% endif %}
+                                        </div>
+                                        {% else %}
+                                        <div class="empty-state">暂无已完成归档。</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const faqSearch = document.getElementById("faqSearch");
+    const faqItems = document.querySelectorAll(".faq-item");
+    if (faqSearch) {
+        faqSearch.addEventListener("input", function () {
+            const keyword = faqSearch.value.trim().toLowerCase();
+            faqItems.forEach(function (item) {
+                item.style.display = item.dataset.faq.toLowerCase().includes(keyword) ? "" : "none";
+            });
+        });
+    }
+
+    const chatBox = document.getElementById("chatBox");
+    const chatInput = document.getElementById("chatInput");
+    const chatSend = document.getElementById("chatSend");
+    function replyFor(text) {
+        if (text.includes("价格") || text.includes("多少钱") || text.includes("报价")) {
+            return "产品价格可在产品详情页查看，也可以提交正式咨询记录让管理员给出方案报价。";
+        }
+        if (text.includes("售后") || text.includes("安装") || text.includes("维修") || text.includes("升级")) {
+            return "平台支持安装调试、故障维修、定期维护、软件升级和使用培训。";
+        }
+        if (text.includes("发货") || text.includes("物流") || text.includes("配送")) {
+            return "订单完成模拟支付后会进入待发货状态，管理员确认后安排仓库配货与发货。";
+        }
+        return "您的问题已记录，客服人员会尽快处理，也可以在右侧提交正式咨询记录。";
+    }
+    function appendBubble(text, type) {
+        if (!chatBox) return;
+        const bubble = document.createElement("div");
+        bubble.className = "chat-bubble " + type;
+        bubble.textContent = text;
+        chatBox.appendChild(bubble);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    if (chatSend && chatInput) {
+        chatSend.addEventListener("click", function () {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            appendBubble(text, "user");
+            chatInput.value = "";
+            setTimeout(function () { appendBubble(replyFor(text), "bot"); }, 300);
+        });
+        chatInput.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") chatSend.click();
+        });
+    }
+});
+</script>
+{% endblock %}

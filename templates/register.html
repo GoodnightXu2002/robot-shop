@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}用户注册 - 智联机器人商城{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-5">
+                <div class="auth-card">
+                    <h1 class="h3 fw-bold mb-2 text-center">创建用户账号</h1>
+                    <p class="text-muted text-center mb-4">注册后可下单、咨询和预约售后服务。</p>
+                    <form method="post">
+                        <div class="mb-3">
+                            <label class="form-label" for="username">用户名</label>
+                            <input class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="phone">联系方式</label>
+                            <input class="form-control" id="phone" name="phone" placeholder="手机号或邮箱">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="email">邮箱</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="example@mail.com">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="password">密码</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                            <div class="form-text">建议不少于 6 位。</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="confirm_password">确认密码</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                        </div>
+                        <button class="btn btn-primary w-100" type="submit">注册</button>
+                    </form>
+                    <p class="text-center mt-3 mb-0">已有账号？<a href="{{ url_for('login') }}">去登录</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

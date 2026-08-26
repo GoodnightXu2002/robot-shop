@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}模拟支付 - 智联机器人商城{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="auth-card">
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-outline-secondary back-btn" onclick="goBackOr('{{ url_for('order_detail', order_id=order.id) }}')">← 返回上一级</button>
+                    </div>
+                    <h1 class="h3 fw-bold mb-3 text-center">模拟支付</h1>
+                    <p class="text-muted text-center mb-4">本页面不接入真实支付接口，仅用于演示订单支付与状态流转，不会产生真实扣款。</p>
+                    <div class="content-panel mb-4">
+                        <div class="d-flex justify-content-between mb-2"><span>订单编号</span><strong>{{ order.order_no }}</strong></div>
+                        <div class="d-flex justify-content-between mb-2"><span>产品名称</span><strong>{{ order.product.name }}</strong></div>
+                        <div class="d-flex justify-content-between mb-2"><span>购买数量</span><strong>{{ order.quantity }}</strong></div>
+                        <div class="d-flex justify-content-between"><span>支付金额</span><strong class="detail-price fs-4">￥{{ "%.2f"|format(order.total_price) }}</strong></div>
+                    </div>
+                    {% if order.status == "待支付" %}
+                    <form method="post" action="{{ url_for('confirm_payment', order_id=order.id) }}" class="d-grid">
+                        <button class="btn btn-primary btn-lg" type="submit">确认支付</button>
+                    </form>
+                    {% else %}
+                    <div class="empty-state">该订单当前状态为 {{ order.status }}，无需重复支付。</div>
+                    {% endif %}
+                    <div class="text-center mt-3">
+                        <a href="{{ url_for('order_detail', order_id=order.id) }}">查看订单详情</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

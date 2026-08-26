@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}用户管理 - 智联机器人商城{% endblock %}
+
+{% block content %}
+<section class="admin-shell">
+    <div class="container-fluid">
+        <div class="row g-0">
+            {% include "admin/_sidebar.html" %}
+            <div class="col-lg-10 admin-main">
+                <div class="admin-title"><div><h1 class="fw-bold">用户管理</h1><p>查看用户资料、角色和业务数据数量。</p></div></div>
+                <div class="admin-page-actions">
+                    <button type="button" class="btn btn-outline-secondary back-btn" onclick="goBackOr('{{ url_for('admin_dashboard') }}')">← 返回上一级</button>
+                </div>
+                <div class="table-responsive bg-white rounded shadow-sm">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light"><tr><th>用户名</th><th>邮箱</th><th>手机号</th><th>角色</th><th>注册时间</th><th>订单</th><th>咨询</th><th>预约</th></tr></thead>
+                        <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email or "-" }}</td>
+                            <td>{{ user.phone or "-" }}</td>
+                            <td><span class="badge {% if user.is_admin %}text-bg-danger{% else %}text-bg-secondary{% endif %}">{{ "管理员" if user.is_admin else "普通用户" }}</span></td>
+                            <td>{{ user.created_at.strftime("%Y-%m-%d") }}</td>
+                            <td>{{ user.orders|length }}</td>
+                            <td>{{ user.consultations|length }}</td>
+                            <td>{{ user.appointments|length }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="8" class="text-center py-4 text-muted">暂无用户。</td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

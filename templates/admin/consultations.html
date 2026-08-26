@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}咨询管理 - 智联机器人商城{% endblock %}
+
+{% macro consultation_card(item, statuses, archived=False) %}
+<div class="record-card h-100 {% if archived %}archived-record{% endif %}">
+    <div class="d-flex justify-content-between gap-3">
+        <div><h2 class="h5 fw-bold">{{ item.title }}</h2><p class="text-muted mb-2">{{ item.content }}</p></div>
+        <span class="badge status-badge align-self-start">{{ item.status }}</span>
+    </div>
+    <div class="record-meta mb-3">
+        用户：{{ item.user.username }}　联系人：{{ item.name }}　电话：{{ item.contact }}<br>
+        产品：{{ item.product.name if item.product else "未关联" }}　提交：{{ item.created_at.strftime("%Y-%m-%d %H:%M") }}
+    </div>
+    <form method="post" action="{{ url_for('admin_consultation_status', consultation_id=item.id) }}">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">状态</label>
+                <select class="form-select" name="status">{% for status in statuses %}<option value="{{ status }}" {% if item.status == status %}selected{% endif %}>{{ status }}</option>{% endfor %}</select>
+            </div>
+            <div class="col-md-8">
+                <label class="form-label">回复内容</label>
+                <textarea class="form-control" name="admin_reply" rows="3">{{ item.admin_reply or '' }}</textarea>
+            </div>
+        </div>
+        <button class="btn btn-primary btn-sm mt-3" type="submit">保存</button>
+    </form>
+</div>
+{% endmacro %}
+
+{% block content %}
+<section class="admin-shell">
+    <div class="container-fluid">
+        <div class="row g-0">
+            {% include "admin/_sidebar.html" %}
+            <div class="col-lg-10 admin-main">
+                <div class="admin-title"><div><h1 class="fw-bold">咨询管理</h1><p>按处理阶段管理咨询记录，已关闭咨询自动进入归档区域。</p></div></div>
+                <div class="admin-page-actions">
+                    <button type="button" class="btn btn-outline-secondary back-btn" onclick="goBackOr('{{ url_for('admin_dashboard') }}')">← 返回上一级</button>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3"><div class="stat-card archive-stat"><span>待处理数量</span><strong>{{ consultation_stats.pending }}</strong></div></div>
+                    <div class="col-md-3"><div class="stat-card archive-stat"><span>处理中数量</span><strong>{{ consultation_stats.processing }}</strong></div></div>
+                    <div class="col-md-3"><div class="stat-card archive-stat"><span>已回复数量</span><strong>{{ consultation_stats.replied }}</strong></div></div>
+                    <div class="col-md-3"><div class="stat-card archive-stat"><span>已完成归档</span><strong>{{ consultation_stats.archived }}</strong></div></div>
+                </div>
+
+                <div class="content-panel archive-section">
+                    <div class="panel-title-row">
+                        <div><span class="panel-kicker">Pending</span><h2 class="h4 fw-bold mb-0">待处理咨询</h2></div>
+                        <span class="badge status-badge">{{ pending_consultations|length }} 条</span>
+                    </div>
+                    <div class="row g-4">
+                        {% for item in pending_consultations %}
+                        <div class="col-xl-6">{{ consultation_card(item, statuses) }}</div>
+                        {% else %}
+                        <div class="col-12"><div class="empty-state">暂无待处理咨询。</div></div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="content-panel archive-section mt-4">
+                    <div class="panel-title-row">
+                        <div><span class="panel-kicker">Processing</span><h2 class="h4 fw-bold mb-0">处理中/已回复咨询</h2></div>
+                        <span class="badge status-badge">{{ processing_consultations|length }} 条</span>
+                    </div>
+                    <div class="row g-4">
+                        {% for item in processing_consultations %}
+                        <div class="col-xl-6">{{ consultation_card(item, statuses) }}</div>
+                        {% else %}
+                        <div class="col-12"><div class="empty-state">暂无处理中或已回复咨询。</div></div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="content-panel archive-section archive-panel mt-4">
+                    <div class="panel-title-row">
+                        <div><span class="panel-kicker">Archive</span><h2 class="h4 fw-bold mb-0">已完成归档</h2></div>
+                        <span class="badge status-badge">{{ archived_consultations|length }} 条</span>
+                    </div>
+                    <div class="accordion archive-accordion" id="adminConsultArchive">
+                        <div class="accordion-item">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#adminConsultArchiveBody">
+                                    查看已关闭咨询记录
+                                </button>
+                            </h3>
+                            <div id="adminConsultArchiveBody" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    <div class="row g-4">
+                                        {% for item in archived_consultations %}
+                                        <div class="col-xl-6">{{ consultation_card(item, statuses, True) }}</div>
+                                        {% else %}
+                                        <div class="col-12"><div class="empty-state">暂无已完成归档。</div></div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

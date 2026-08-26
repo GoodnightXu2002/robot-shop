@@ -1,0 +1,1111 @@
+.site-body .service-support-page {
+    --support-text: #111318;
+    --support-muted: #69717d;
+    --support-line: #dde3eb;
+    --support-soft: #f7f9fc;
+    --support-blue: #0b6bff;
+    --support-blue-dark: #0757da;
+    background: #fff;
+    color: var(--support-text);
+    padding: 30px 0 84px;
+}
+
+.site-body .service-support-container {
+    width: min(100% - 64px, 1360px);
+    margin: 0 auto;
+}
+
+.site-body .support-diagnosis {
+    position: relative;
+}
+
+.site-body .support-diagnosis-main {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.site-body .support-diagnosis h1 {
+    width: calc(100% - 194px);
+    margin: 0 0 18px;
+    color: var(--support-text);
+    font-size: clamp(1.75rem, 2vw, 2rem);
+    font-weight: 720;
+    letter-spacing: -0.035em;
+    line-height: 1.3;
+    text-wrap: balance;
+}
+
+.site-body .support-diagnosis-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 176px;
+    gap: 18px;
+    align-items: center;
+}
+
+.site-body .support-diagnosis-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 156px;
+    gap: 20px;
+    min-width: 0;
+}
+
+.site-body .support-diagnosis-form input,
+.site-body .support-diagnosis-form button,
+.site-body .support-field input,
+.site-body .support-field select,
+.site-body .support-field textarea {
+    width: 100%;
+    border: 1px solid #cfd7e3;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--support-text);
+    font: inherit;
+    transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+
+.site-body .support-diagnosis-form input {
+    height: 64px;
+    padding: 0 22px;
+    font-size: 1rem;
+}
+
+.site-body .support-diagnosis-form input::placeholder,
+.site-body .support-field input::placeholder,
+.site-body .support-field textarea::placeholder {
+    color: #9aa3af;
+}
+
+.site-body .support-diagnosis-form button,
+.site-body .support-primary-button {
+    border-color: var(--support-blue);
+    background: var(--support-blue);
+    color: #fff;
+    font-weight: 700;
+}
+
+.site-body .support-diagnosis-form button {
+    height: 64px;
+    padding: 0 24px;
+    white-space: nowrap;
+}
+
+.site-body .support-diagnosis-form button:hover,
+.site-body .support-diagnosis-form button:focus-visible,
+.site-body .support-primary-button:hover,
+.site-body .support-primary-button:focus-visible {
+    border-color: var(--support-blue-dark);
+    background: var(--support-blue-dark);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.site-body .support-diagnosis-form input:focus,
+.site-body .support-field input:focus,
+.site-body .support-field select:focus,
+.site-body .support-field textarea:focus {
+    outline: none;
+    border-color: rgba(11, 107, 255, 0.68);
+    box-shadow: 0 0 0 4px rgba(11, 107, 255, 0.1);
+}
+
+.site-body .support-diagnosis-form button:focus-visible,
+.site-body .support-primary-button:focus-visible,
+.site-body .support-outline-button:focus-visible,
+.site-body .support-secondary-link:focus-visible,
+.site-body .support-action-card:focus-visible {
+    outline: 2px solid rgba(11, 107, 255, 0.35);
+    outline-offset: 4px;
+}
+
+.site-body .support-robot-visual {
+    position: relative;
+    display: flex;
+    width: 176px;
+    height: 64px;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    animation: support-robot-float 3.6s ease-in-out infinite;
+}
+
+.site-body .support-robot-art {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: 155px;
+    max-width: none;
+    object-fit: contain;
+    transform: translate(-50%, -50%);
+    opacity: 0.72;
+}
+
+@keyframes support-robot-float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+.site-body .support-steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 42px;
+    align-items: center;
+    margin: 28px auto 32px;
+    padding: 0;
+    list-style: none;
+    max-width: 1040px;
+}
+
+.site-body .support-steps li {
+    position: relative;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    color: #747c88;
+    font-size: 1rem;
+    font-weight: 650;
+}
+
+.site-body .support-steps li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: calc(100% + 2px);
+    width: calc(100% - 54px);
+    height: 1px;
+    border-top: 1px dashed #aab4c2;
+}
+
+.site-body .support-steps span {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #808792;
+    color: #fff;
+    font-weight: 760;
+}
+
+.site-body .support-steps li.is-active {
+    color: var(--support-blue);
+}
+
+.site-body .support-steps li.is-active span {
+    background: var(--support-blue);
+    box-shadow: 0 10px 20px rgba(11, 107, 255, 0.18);
+}
+
+.site-body .support-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1.12fr) minmax(420px, 0.88fr);
+    gap: 28px;
+    align-items: stretch;
+}
+
+.site-body .support-panel,
+.site-body .support-quick-actions,
+.site-body .support-progress-section,
+.site-body .support-record-panel {
+    border: 1px solid var(--support-line);
+    border-radius: 8px;
+    background: #fff;
+}
+
+.site-body .support-panel {
+    min-height: 360px;
+}
+
+.site-body .support-panel-head,
+.site-body .support-section-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    align-items: center;
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--support-line);
+}
+
+.site-body .support-panel-head h2,
+.site-body .support-section-head h2 {
+    margin: 0;
+    color: var(--support-text);
+    font-size: 1.35rem;
+    font-weight: 720;
+    letter-spacing: -0.02em;
+}
+
+.site-body .support-panel-head span,
+.site-body .support-section-head span {
+    color: var(--support-blue);
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.site-body .support-ai-result {
+    padding: 26px;
+}
+
+.site-body .support-ai-status {
+    margin: 0 0 16px;
+    color: var(--support-muted);
+    font-size: 0.95rem;
+}
+
+.site-body .support-ai-card {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 24px;
+    align-items: center;
+    min-height: 172px;
+    padding: 26px;
+    border: 1px solid #cfe0ff;
+    border-radius: 8px;
+    background: #f8fbff;
+}
+
+.site-body .support-ai-card.is-busy {
+    opacity: 0.78;
+}
+
+.site-body .support-ai-mark {
+    display: grid;
+    place-items: center;
+    width: 74px;
+    height: 74px;
+    border: 1px solid rgba(11, 107, 255, 0.34);
+    border-radius: 20px;
+    background: #fff;
+    color: var(--support-blue);
+    font-size: 1.25rem;
+    font-weight: 760;
+}
+
+.site-body .support-ai-card h3 {
+    margin: 0 0 10px;
+    color: var(--support-text);
+    font-size: 1.12rem;
+    font-weight: 720;
+}
+
+.site-body .support-ai-card p {
+    margin: 0;
+    color: #4f5865;
+    line-height: 1.75;
+}
+
+.site-body .support-ai-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 0 26px 26px;
+}
+
+.site-body .support-outline-button,
+.site-body .support-secondary-link,
+.site-body .support-primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 720;
+}
+
+.site-body .support-outline-button,
+.site-body .support-secondary-link {
+    border: 1px solid var(--support-blue);
+    background: #fff;
+    color: var(--support-blue);
+}
+
+.site-body .support-outline-button:hover,
+.site-body .support-secondary-link:hover {
+    background: #f4f8ff;
+    color: var(--support-blue-dark);
+}
+
+.site-body .support-booking-form {
+    display: grid;
+    gap: 16px;
+    padding: 20px 26px 26px;
+}
+
+.site-body .support-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.site-body .support-field {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+}
+
+.site-body .support-field span {
+    color: #3f4752;
+    font-size: 0.86rem;
+    font-weight: 650;
+}
+
+.site-body .support-field input,
+.site-body .support-field select {
+    height: 50px;
+    padding: 0 14px;
+}
+
+.site-body .support-field textarea {
+    min-height: 92px;
+    padding: 13px 14px;
+    resize: vertical;
+}
+
+.site-body .support-primary-button {
+    min-height: 54px;
+    border: 1px solid var(--support-blue);
+}
+
+.site-body .support-quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-top: 24px;
+    overflow: hidden;
+}
+
+.site-body .support-action-card {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr) auto;
+    grid-template-areas:
+        "icon title cta"
+        "icon copy cta";
+    column-gap: 20px;
+    align-items: center;
+    min-height: 104px;
+    padding: 24px 34px;
+    color: var(--support-text);
+    text-decoration: none;
+}
+
+.site-body .support-action-card + .support-action-card {
+    border-left: 1px solid var(--support-line);
+}
+
+.site-body .support-action-card:hover {
+    background: #fbfdff;
+}
+
+.site-body .support-action-icon {
+    grid-area: icon;
+    display: grid;
+    place-items: center;
+    width: 50px;
+    height: 50px;
+    border: 1px solid rgba(11, 107, 255, 0.35);
+    border-radius: 16px;
+    color: var(--support-blue);
+    font-size: 0.82rem;
+    font-weight: 760;
+}
+
+.site-body .support-action-card strong {
+    grid-area: title;
+    font-size: 1.04rem;
+}
+
+.site-body .support-action-card small {
+    grid-area: copy;
+    color: var(--support-muted);
+}
+
+.site-body .support-action-card em {
+    grid-area: cta;
+    color: var(--support-blue);
+    font-style: normal;
+    font-weight: 720;
+}
+
+.site-body .support-progress-section {
+    margin-top: 24px;
+    scroll-margin-top: 92px;
+}
+
+.site-body .support-latest-record {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-start;
+    margin: 24px 28px 18px;
+    padding: 18px;
+    border: 1px solid var(--support-line);
+    border-radius: 8px;
+    background: var(--support-soft);
+}
+
+.site-body .support-latest-record strong,
+.site-body .support-record-title h3 {
+    color: var(--support-text);
+    font-size: 1rem;
+}
+
+.site-body .support-latest-record p {
+    margin: 6px 0 0;
+    color: var(--support-muted);
+}
+
+.site-body .support-record-meta {
+    color: var(--support-muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+.site-body .support-service-progress,
+.site-body .support-mini-progress {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.site-body .support-service-progress {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+    padding: 0 28px 28px;
+}
+
+.site-body .support-service-progress li,
+.site-body .support-mini-progress li {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    color: #7b8490;
+    font-size: 0.86rem;
+    font-weight: 650;
+}
+
+.site-body .support-service-progress span,
+.site-body .support-mini-progress span {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #d9dee6;
+    color: #fff;
+    font-size: 0.78rem;
+}
+
+.site-body .support-service-progress li.is-active,
+.site-body .support-mini-progress li.is-active {
+    color: var(--support-blue);
+}
+
+.site-body .support-service-progress li.is-active span,
+.site-body .support-mini-progress li.is-active span {
+    background: var(--support-blue);
+}
+
+.site-body .support-records-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.site-body .support-record-list {
+    display: grid;
+    gap: 14px;
+    padding: 20px;
+}
+
+.site-body .support-record-card {
+    padding: 18px;
+    border: 1px solid var(--support-line);
+    border-radius: 8px;
+    background: #fff;
+}
+
+.site-body .support-record-title {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.site-body .support-record-title h3,
+.site-body .support-record-card p {
+    margin: 0;
+}
+
+.site-body .support-record-title span {
+    flex: 0 0 auto;
+    color: var(--support-blue);
+    font-size: 0.82rem;
+    font-weight: 720;
+}
+
+.site-body .support-record-card p {
+    margin-top: 8px;
+    color: var(--support-muted);
+}
+
+.site-body .support-mini-progress {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.site-body .support-note {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--support-soft);
+    color: #4f5865;
+    font-size: 0.9rem;
+}
+
+.site-body .support-archive .accordion-item,
+.site-body .support-archive .accordion-button,
+.site-body .support-archive .accordion-body {
+    border-color: var(--support-line);
+    background: #fff;
+}
+
+.site-body .support-archive .accordion-button {
+    color: var(--support-text);
+    font-weight: 650;
+}
+
+.site-body .support-empty {
+    margin: 20px;
+    padding: 22px;
+    border: 1px solid var(--support-line);
+    border-radius: 8px;
+    background: var(--support-soft);
+    color: var(--support-muted);
+    text-align: center;
+}
+
+.site-body .support-consultation-section {
+    margin-top: 24px;
+}
+
+.site-body .support-consultation-section[hidden] {
+    display: none;
+}
+
+.site-body .support-consultation-notice {
+    margin: 20px 26px 0;
+    padding: 12px 14px;
+    border: 1px solid #b9d3ff;
+    border-radius: 8px;
+    background: #f4f8ff;
+    color: #31557f;
+}
+
+.site-body .support-consultation-grid {
+    display: grid;
+    grid-template-columns: minmax(360px, 0.85fr) minmax(0, 1.15fr);
+}
+
+.site-body .support-consultation-form,
+.site-body .support-consultation-records {
+    padding: 26px;
+}
+
+.site-body .support-consultation-form {
+    border-right: 1px solid var(--support-line);
+}
+
+.site-body .support-consultation-records > .support-section-head {
+    margin: -26px -26px 0;
+}
+
+.site-body .support-consultation-records > .support-record-list {
+    margin-top: 20px;
+}
+
+.site-body .support-consultation-record p {
+    white-space: pre-wrap;
+}
+
+.site-body .support-consultation-archive {
+    margin-top: 20px;
+}
+
+@media (max-width: 1199.98px) {
+    .site-body .service-support-container {
+        width: min(100% - 44px, 980px);
+    }
+
+    .site-body .support-diagnosis-main {
+        max-width: 920px;
+    }
+
+    .site-body .support-diagnosis h1 {
+        width: calc(100% - 168px);
+    }
+
+    .site-body .support-diagnosis-controls {
+        grid-template-columns: minmax(0, 1fr) 150px;
+    }
+
+    .site-body .support-robot-visual {
+        width: 150px;
+    }
+
+    .site-body .support-robot-art {
+        height: 140px;
+    }
+
+    .site-body .support-workspace,
+    .site-body .support-records-grid,
+    .site-body .support-consultation-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .site-body .support-consultation-form {
+        border-right: 0;
+        border-bottom: 1px solid var(--support-line);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .site-body .service-support-page {
+        padding: 26px 0 64px;
+    }
+
+    .site-body .service-support-container {
+        width: min(100% - 28px, 640px);
+    }
+
+    .site-body .support-diagnosis-controls,
+    .site-body .support-diagnosis-form,
+    .site-body .support-form-row,
+    .site-body .support-ai-actions,
+    .site-body .support-quick-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .site-body .support-diagnosis h1 {
+        width: 100%;
+    }
+
+    .site-body .support-robot-visual {
+        display: none;
+    }
+
+    .site-body .support-steps {
+        gap: 14px;
+    }
+
+    .site-body .support-steps li:not(:last-child)::after {
+        display: none;
+    }
+
+    .site-body .support-ai-card,
+    .site-body .support-action-card,
+    .site-body .support-latest-record {
+        grid-template-columns: 1fr;
+        display: grid;
+    }
+
+    .site-body .support-action-card {
+        grid-template-areas: "icon" "title" "copy" "cta";
+        gap: 8px;
+    }
+
+    .site-body .support-action-card + .support-action-card {
+        border-top: 1px solid var(--support-line);
+        border-left: 0;
+    }
+
+    .site-body .support-service-progress {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .site-body .support-robot-visual {
+        animation: none;
+    }
+
+    .site-body .support-diagnosis-form input,
+    .site-body .support-diagnosis-form button,
+    .site-body .support-field input,
+    .site-body .support-field select,
+    .site-body .support-field textarea,
+    .site-body .support-primary-button {
+        transition: none;
+    }
+}
+
+/* v0 service-support migration: scoped to this page only. */
+.site-body .service-support-page {
+    --support-blue: #2563eb;
+    --support-blue-dark: #1d4ed8;
+    --support-line: #e5e7eb;
+    --support-soft: #f7f8fa;
+    padding: 0 0 64px;
+}
+
+.site-body .service-support-container {
+    width: min(calc(100% - 128px), 1312px);
+}
+
+.site-body .support-diagnosis {
+    min-height: 0;
+    padding-top: 32px;
+}
+
+.site-body .support-diagnosis-main {
+    width: 100%;
+    max-width: 980px;
+    margin: 0;
+}
+
+@media (min-width: 1024px) {
+    .site-body .support-diagnosis-main {
+        max-width: min(980px, calc(100% - 260px));
+        margin-left: 36px;
+    }
+}
+
+.site-body .support-diagnosis h1 {
+    width: 100%;
+    margin: 0;
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.025em;
+}
+
+.site-body .support-diagnosis-form {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.site-body .support-diagnosis-form input {
+    height: 56px;
+    padding: 0 20px;
+    border-color: var(--support-line);
+    border-radius: 8px;
+    font-size: 0.94rem;
+}
+
+.site-body .support-diagnosis-form button {
+    width: auto;
+    height: 56px;
+    padding: 0 36px;
+    border-radius: 8px;
+    font-size: 0.94rem;
+    font-weight: 600;
+}
+
+.site-body .support-robot-art {
+    position: absolute;
+    z-index: 0;
+    top: 8px;
+    right: 0;
+    left: auto;
+    width: auto;
+    height: 224px;
+    max-width: none;
+    object-fit: contain;
+    opacity: 1;
+    transform: none;
+    pointer-events: none;
+    user-select: none;
+}
+
+.site-body .support-steps {
+    width: 100%;
+    max-width: none;
+    gap: 0;
+    margin: 24px 0 0;
+}
+
+.site-body .support-steps li {
+    gap: 12px;
+    font-size: 0.94rem;
+    font-weight: 500;
+}
+
+.site-body .support-steps li:not(:last-child)::after {
+    left: 152px;
+    right: 24px;
+    width: auto;
+    border-top-color: var(--support-line);
+}
+
+.site-body .support-steps span {
+    width: 32px;
+    height: 32px;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.site-body .support-steps li.is-active span {
+    box-shadow: none;
+}
+
+.site-body .support-workspace {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+    margin-top: 24px;
+}
+
+.site-body .support-panel,
+.site-body .support-quick-actions,
+.site-body .support-progress-section,
+.site-body .support-record-panel {
+    border-color: var(--support-line);
+    border-radius: 12px;
+}
+
+.site-body .support-panel {
+    min-height: 0;
+}
+
+.site-body .support-ai-panel,
+.site-body .support-booking-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.site-body .support-panel-head {
+    min-height: 58px;
+    padding: 24px 28px 0;
+    border-bottom: 0;
+}
+
+.site-body .support-panel-head h2 {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.site-body .support-title-icon {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: var(--support-blue);
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.site-body .support-ai-result {
+    padding: 20px 28px 0;
+}
+
+.site-body .support-ai-status {
+    margin-bottom: 14px;
+    font-size: 0.88rem;
+}
+
+.site-body .support-ai-card {
+    grid-template-columns: 80px minmax(0, 1fr);
+    gap: 20px;
+    min-height: 180px;
+    padding: 24px;
+    border: 0;
+    border-radius: 8px;
+    background: #eef3ff;
+}
+
+.site-body .support-ai-mark {
+    width: 72px;
+    height: 72px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    font-size: 1.1rem;
+}
+
+.site-body .support-ai-card h3 {
+    font-size: 1rem;
+    font-weight: 650;
+}
+
+.site-body .support-ai-card p {
+    color: var(--support-muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+.site-body .support-ai-actions {
+    display: block;
+    margin-top: auto;
+    padding: 22px 28px 28px;
+}
+
+.site-body .support-or-divider {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 20px;
+    color: var(--support-muted);
+    font-size: 0.88rem;
+}
+
+.site-body .support-or-divider::before,
+.site-body .support-or-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--support-line);
+}
+
+.site-body .support-outline-button {
+    width: 100%;
+    min-height: 54px;
+    gap: 8px;
+    border-color: var(--support-line);
+    color: var(--support-text);
+    font-size: 0.94rem;
+    font-weight: 600;
+}
+
+.site-body .support-outline-button:hover {
+    border-color: var(--support-blue);
+    color: var(--support-blue);
+}
+
+.site-body .support-booking-form {
+    flex: 1;
+    gap: 10px;
+    padding: 16px 28px 28px;
+}
+
+.site-body .support-booking-panel .support-booking-form {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-content: start;
+}
+
+.site-body .support-booking-panel .support-booking-form > .support-form-row {
+    grid-column: span 2;
+}
+
+.site-body .support-booking-panel .support-booking-form > .support-field:last-of-type,
+.site-body .support-booking-panel .support-booking-form > .support-primary-button {
+    grid-column: 1 / -1;
+}
+
+.site-body .support-form-row {
+    gap: 12px;
+}
+
+.site-body .support-field {
+    gap: 5px;
+}
+
+.site-body .support-field span {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.site-body .support-field input,
+.site-body .support-field select {
+    height: 46px;
+    border-color: var(--support-line);
+    border-radius: 8px;
+}
+
+.site-body .support-field textarea {
+    height: 62px;
+    min-height: 62px;
+    border-color: var(--support-line);
+    border-radius: 8px;
+}
+
+.site-body .support-primary-button {
+    min-height: 52px;
+    margin-top: auto;
+    font-size: 0.94rem;
+    font-weight: 600;
+}
+
+.site-body .support-quick-actions {
+    margin-top: 24px;
+    border-radius: 12px;
+}
+
+.site-body .support-action-card {
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+    min-height: 92px;
+    padding: 20px 28px;
+}
+
+.site-body .support-action-icon {
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 8px;
+    background: #eef3ff;
+}
+
+.site-body .support-consultation-section,
+.site-body .support-progress-section,
+.site-body .support-records-grid {
+    margin-top: 32px;
+}
+
+@media (max-width: 1023.98px) {
+    .site-body .service-support-container {
+        width: min(calc(100% - 44px), 920px);
+    }
+
+    .site-body .support-robot-art {
+        display: none;
+    }
+
+    .site-body .support-diagnosis-main {
+        max-width: none;
+    }
+
+    .site-body .support-workspace {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .site-body .service-support-container {
+        width: min(calc(100% - 28px), 640px);
+    }
+
+    .site-body .support-diagnosis {
+        padding-top: 24px;
+    }
+
+    .site-body .support-diagnosis h1 {
+        font-size: 1.55rem;
+    }
+
+    .site-body .support-diagnosis-form,
+    .site-body .support-form-row,
+    .site-body .support-quick-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .site-body .support-booking-panel .support-booking-form {
+        display: flex;
+    }
+
+    .site-body .support-diagnosis-form button {
+        width: 100%;
+    }
+}

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}后台首页 - 智联机器人商城{% endblock %}
+
+{% block content %}
+<section class="admin-shell">
+    <div class="container-fluid">
+        <div class="row g-0">
+            {% include "admin/_sidebar.html" %}
+            <div class="col-lg-10 admin-main">
+                <div class="admin-title">
+                    <div>
+                        <h1 class="fw-bold">后台首页</h1>
+                        <p>展示系统核心统计、最近业务记录和分类产品分布。</p>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-xl-2"><div class="stat-card"><span>用户总数</span><strong>{{ stats.user_count }}</strong></div></div>
+                    <div class="col-md-6 col-xl-2"><div class="stat-card"><span>产品总数</span><strong>{{ stats.product_count }}</strong></div></div>
+                    <div class="col-md-6 col-xl-2"><div class="stat-card"><span>订单总数</span><strong>{{ stats.order_count }}</strong></div></div>
+                    <div class="col-md-6 col-xl-2"><div class="stat-card"><span>咨询总数</span><strong>{{ stats.consultation_count }}</strong></div></div>
+                    <div class="col-md-6 col-xl-2"><div class="stat-card"><span>预约总数</span><strong>{{ stats.appointment_count }}</strong></div></div>
+                    <div class="col-md-6 col-xl-2"><div class="stat-card"><span>总销售额</span><strong class="money">￥{{ "%.0f"|format(stats.total_sales) }}</strong></div></div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-xl-6">
+                        <div class="content-panel h-100">
+                            <h2 class="h5 fw-bold mb-3">最近订单</h2>
+                            {% for order in latest_orders %}
+                            <div class="mini-record"><strong>{{ order.order_no }}</strong><span>{{ order.user.username }} / {{ order.product.name }} / {{ order.status }}</span></div>
+                            {% else %}
+                            <div class="empty-state py-3">暂无订单。</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="content-panel h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h2 class="h5 fw-bold mb-0">待处理消息</h2>
+                                <a href="{{ url_for('admin_messages') }}">查看全部</a>
+                            </div>
+                            {% for item in unread_notifications %}
+                            <div class="mini-record notification-mini">
+                                <strong>{{ item.title }}</strong>
+                                <span>{{ item.content }}</span>
+                            </div>
+                            {% else %}
+                            <div class="empty-state py-3">暂无未读消息。</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-xl-6">
+                        <div class="content-panel h-100">
+                            <h2 class="h5 fw-bold mb-3">最近咨询</h2>
+                            {% for item in latest_consultations %}
+                            <div class="mini-record"><strong>{{ item.title }}</strong><span>{{ item.user.username }} / {{ item.status }}</span></div>
+                            {% else %}
+                            <div class="empty-state py-3">暂无咨询。</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="content-panel h-100">
+                            <h2 class="h5 fw-bold mb-3">最近预约</h2>
+                            {% for item in latest_appointments %}
+                            <div class="mini-record"><strong>{{ item.service_type }}</strong><span>{{ item.user.username }} / {{ item.status }} / {{ item.appointment_date or item.appointment_time }}</span></div>
+                            {% else %}
+                            <div class="empty-state py-3">暂无预约。</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-panel">
+                    <h2 class="h5 fw-bold mb-3">分类产品数量统计</h2>
+                    {% for item in category_stats %}
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1"><span>{{ item.category }}</span><span>{{ item.count }} 个</span></div>
+                        <div class="progress"><div class="progress-bar" style="width: {{ item.percent }}%"></div></div>
+                    </div>
+                    {% else %}
+                    <div class="empty-state py-3">暂无产品分类。</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

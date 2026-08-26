@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}无权限访问 - 智联机器人商城{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="auth-card text-center">
+                    <h1 class="fw-bold">403</h1>
+                    <p class="lead text-muted">当前账号没有访问后台管理页面的权限。</p>
+                    <a class="btn btn-primary" href="{{ url_for('index') }}">返回首页</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

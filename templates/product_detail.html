@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} - 智联机器人商城{% endblock %}
+
+{% block page_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/product_detail.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="product-detail product-detail-page" aria-labelledby="product-title">
+    <div class="product-detail-container">
+        <a class="product-detail-back" href="{{ url_for('products') }}">返回产品中心</a>
+
+        <article class="product-detail-hero">
+            <div class="product-detail-gallery">
+                <div class="product-detail-main-media">
+                    <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+                </div>
+            </div>
+
+            <div class="product-detail-purchase">
+                <div class="product-detail-badges">
+                    <span class="product-detail-badge is-category">{{ product.category }}</span>
+                    {% if product.is_hot %}<span class="product-detail-badge is-hot">热门产品</span>{% endif %}
+                    {% if not product.is_active %}<span class="product-detail-badge is-inactive">已下架</span>{% endif %}
+                </div>
+
+                <h1 id="product-title">{{ product.name }}</h1>
+
+                {% if product.brand or product.country_region or product.model %}
+                <div class="product-detail-meta" aria-label="产品基本信息">
+                    {% if product.brand %}<span>{{ product.brand }}</span>{% endif %}
+                    {% if product.country_region %}<span>{{ product.country_region }}</span>{% endif %}
+                    {% if product.model %}<span>{{ product.model }}</span>{% endif %}
+                </div>
+                {% endif %}
+
+                {% if product.description %}
+                <p class="product-detail-description">{{ product.description }}</p>
+                {% endif %}
+
+                <div class="product-detail-commerce">
+                    <strong class="product-detail-price">￥{{ "%.2f"|format(product.price) }}</strong>
+                    <dl class="product-detail-stock-sales">
+                        <div><dt>库存</dt><dd>{{ product.stock }} 台</dd></div>
+                        <div><dt>销量</dt><dd>{{ product.sales }}</dd></div>
+                    </dl>
+                </div>
+
+                {% if product.brand or product.country_region or product.model %}
+                <dl class="product-detail-highlights">
+                    {% if product.brand %}<div><dt>品牌</dt><dd>{{ product.brand }}</dd></div>{% endif %}
+                    {% if product.country_region %}<div><dt>国家/地区</dt><dd>{{ product.country_region }}</dd></div>{% endif %}
+                    {% if product.model %}<div><dt>型号</dt><dd>{{ product.model }}</dd></div>{% endif %}
+                </dl>
+                {% endif %}
+
+                {% if product.source_url or product.demo_url %}
+                <div class="product-detail-links">
+                    {% if product.source_url %}
+                    <div><span>资料来源</span><a href="{{ product.source_url }}" target="_blank" rel="noopener">查看官网资料</a></div>
+                    {% endif %}
+                    {% if product.demo_url %}
+                    <div><span>演示链接</span><a href="{{ product.demo_url }}" target="_blank" rel="noopener">打开演示/官网</a></div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <div class="product-detail-actions">
+                    {% if current_user.is_authenticated %}
+                    <form method="post" action="{{ url_for('create_order', product_id=product.id) }}" class="product-order-form">
+                        <div class="product-quantity-field">
+                            <label for="quantity">购买数量</label>
+                            <div class="product-quantity-control" data-quantity-control>
+                                <button type="button" data-quantity-decrease aria-label="减少购买数量">−</button>
+                                <input type="number" min="1" max="{{ product.stock }}" value="1" name="quantity" id="quantity" required data-quantity-input>
+                                <button type="button" data-quantity-increase aria-label="增加购买数量">＋</button>
+                            </div>
+                        </div>
+                        <button class="product-action-primary" type="submit" {% if product.stock <= 0 or not product.is_active %}disabled{% endif %}>立即下单</button>
+                    </form>
+
+                    <div class="product-secondary-actions">
+                        <form method="post" action="{{ url_for('add_cart', product_id=product.id) }}">
+                            <input type="hidden" name="quantity" value="1" data-cart-quantity>
+                            <button class="product-action-secondary" type="submit" {% if product.stock <= 0 or not product.is_active %}disabled{% endif %}>加入购物车</button>
+                        </form>
+                        <form method="post" action="{{ url_for('add_wishlist', product_id=product.id) }}">
+                            <button class="product-action-secondary" type="submit" {% if in_wishlist %}disabled{% endif %}>{{ "已在意向清单" if in_wishlist else "加入意向清单" }}</button>
+                        </form>
+                    </div>
+                    <a class="product-action-consult" href="{{ url_for('consultations', product_id=product.id) }}">在线咨询</a>
+                    {% else %}
+                    <div class="product-login-notice">
+                        登录后可以下单、加入购物车、保存意向产品和提交咨询。
+                        <a href="{{ url_for('login') }}">立即登录</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </article>
+
+        <section class="product-detail-content-card" aria-label="产品详细内容">
+            <nav class="product-detail-section-nav" aria-label="产品详情页签" role="tablist">
+                <button class="is-active" type="button" role="tab" id="overview-tab" aria-controls="overview" aria-selected="true" data-panel-target="overview">产品概述</button>
+                <button type="button" role="tab" id="parameters-tab" aria-controls="parameters" aria-selected="false" tabindex="-1" data-panel-target="parameters">产品参数</button>
+                <button type="button" role="tab" id="features-tab" aria-controls="features" aria-selected="false" tabindex="-1" data-panel-target="features">产品特点</button>
+                <button type="button" role="tab" id="scenes-tab" aria-controls="scenes" aria-selected="false" tabindex="-1" data-panel-target="scenes">适用场景</button>
+                <button type="button" role="tab" id="reviews-tab" aria-controls="reviews" aria-selected="false" tabindex="-1" data-panel-target="reviews">用户评价</button>
+                <button type="button" role="tab" id="video-tab" aria-controls="video" aria-selected="false" tabindex="-1" data-panel-target="video">视频演示</button>
+            </nav>
+
+            <div class="product-detail-content-stack">
+                <section class="product-detail-section product-overview-section" id="overview" role="tabpanel" aria-labelledby="overview-tab" data-detail-panel>
+                    <header class="product-detail-section-heading">
+                        <h2 id="overview-title">产品概述</h2>
+                    </header>
+                    <p>{{ product.detail or product.description }}</p>
+                </section>
+
+                <section class="product-detail-section" id="parameters" role="tabpanel" aria-labelledby="parameters-tab" data-detail-panel hidden>
+                    <header class="product-detail-section-heading">
+                        <h2 id="parameters-title">产品参数</h2>
+                    </header>
+                    <div class="product-parameter-table-wrap">
+                        <table class="product-parameter-table">
+                            <tbody>
+                                {% if product.brand %}<tr><th>品牌</th><td>{{ product.brand }}</td></tr>{% endif %}
+                                {% if product.model %}<tr><th>产品型号</th><td>{{ product.model }}</td></tr>{% endif %}
+                                {% if product.country_region %}<tr><th>国家/地区</th><td>{{ product.country_region }}</td></tr>{% endif %}
+                                {% if product.size %}<tr><th>尺寸</th><td>{{ product.size }}</td></tr>{% endif %}
+                                {% if product.battery_life %}<tr><th>续航时间</th><td>{{ product.battery_life }}</td></tr>{% endif %}
+                                {% if product.charge_time %}<tr><th>充电时间</th><td>{{ product.charge_time }}</td></tr>{% endif %}
+                                {% if product.speed %}<tr><th>运行速度</th><td>{{ product.speed }}</td></tr>{% endif %}
+                                {% if scenes %}<tr><th>适用场景</th><td>{{ scenes|join("、") }}</td></tr>{% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% if product.parameters %}
+                    <details class="product-parameter-source">
+                        <summary>查看完整参数原文</summary>
+                        <p>{{ product.parameters }}</p>
+                    </details>
+                    {% endif %}
+                </section>
+
+                <section class="product-detail-section" id="features" role="tabpanel" aria-labelledby="features-tab" data-detail-panel hidden>
+                    <header class="product-detail-section-heading">
+                        <h2 id="features-title">产品特点</h2>
+                    </header>
+                    <ul class="product-feature-list">
+                        {% for item in features %}
+                        <li>{{ item }}</li>
+                        {% else %}
+                        <li>暂无特点信息。</li>
+                        {% endfor %}
+                    </ul>
+                </section>
+
+                <section class="product-detail-section" id="scenes" role="tabpanel" aria-labelledby="scenes-tab" data-detail-panel hidden>
+                    <header class="product-detail-section-heading">
+                        <h2 id="scenes-title">适用场景</h2>
+                    </header>
+                    <div class="product-scene-list">
+                        {% for item in scenes %}
+                        <span>{{ item }}</span>
+                        {% else %}
+                        <span>暂无适用场景信息。</span>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <section class="product-detail-section product-review-section" id="reviews" role="tabpanel" aria-labelledby="reviews-tab" data-detail-panel hidden>
+                    <div class="product-review-heading">
+                        <div>
+                            <h2 id="reviews-title">用户评价</h2>
+                            <p>共 {{ review_count }} 条评价，平均评分 {{ avg_rating }} 分</p>
+                        </div>
+                        <div class="product-review-score" aria-label="平均评分 {{ avg_rating }} 分">
+                            <strong>{{ avg_rating }}</strong>
+                            <span>{% for score in range(1, 6) %}{{ "★" if avg_rating >= score else "☆" }}{% endfor %}</span>
+                            <small>基于 {{ review_count }} 条评价</small>
+                        </div>
+                    </div>
+
+                    {% if current_user.is_authenticated %}
+                        {% if my_review %}
+                        <div class="product-review-notice">您已评价过该产品，感谢您的反馈。</div>
+                        {% else %}
+                        <form method="post" action="{{ url_for('add_review', product_id=product.id) }}" class="product-review-form">
+                            <label for="reviewRating">评分
+                                <select id="reviewRating" name="rating" required>
+                                    {% for score in [5, 4, 3, 2, 1] %}<option value="{{ score }}">{{ score }} 分</option>{% endfor %}
+                                </select>
+                            </label>
+                            <label for="reviewContent">评价内容
+                                <textarea id="reviewContent" name="content" rows="3" placeholder="分享您对该产品的使用体验或购买感受" required></textarea>
+                            </label>
+                            <button type="submit">提交评价</button>
+                        </form>
+                        {% endif %}
+                    {% else %}
+                    <div class="product-review-notice">登录后可以发表评价。<a href="{{ url_for('login') }}">立即登录</a></div>
+                    {% endif %}
+
+                    <div class="product-review-list">
+                        {% for review in reviews %}
+                        <article class="product-review-item">
+                            <header>
+                                <div>
+                                    <strong>{{ review.user.username }}</strong>
+                                    {% if review.is_verified_purchase %}<span class="product-verified-badge">已购买用户</span>{% endif %}
+                                    <span class="product-review-stars" aria-label="{{ review.rating }} 分">{% for _ in range(review.rating) %}★{% endfor %}{% for _ in range(5 - review.rating) %}☆{% endfor %}</span>
+                                </div>
+                                <time>{{ review.created_at.strftime("%Y-%m-%d %H:%M") if review.created_at else "" }}</time>
+                            </header>
+                            <p>{{ review.content }}</p>
+                        </article>
+                        {% else %}
+                        <div class="product-review-empty">暂无用户评价，欢迎发表第一条评价。</div>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <section class="product-detail-section" id="video" role="tabpanel" aria-labelledby="video-tab" data-detail-panel hidden>
+                    <header class="product-detail-section-heading">
+                        <h2 id="video-title">视频演示</h2>
+                        <p>展示机器人运行、路径规划、交互操作和服务流程。</p>
+                    </header>
+                    {% if product.video_url %}
+                    <div class="ratio ratio-16x9 product-video-frame">
+                        <iframe src="{{ product.video_url }}" title="{{ product.name }}视频演示" allowfullscreen></iframe>
+                    </div>
+                    {% else %}
+                    <div class="product-video-placeholder">
+                        <strong>当前产品暂无嵌入式演示视频</strong>
+                        <p>{{ product.video_desc or "可通过产品资料来源查看公开演示信息。" }}</p>
+                        {% if product.demo_url %}<a href="{{ product.demo_url }}" target="_blank" rel="noopener">查看公开演示/官网资料</a>{% endif %}
+                    </div>
+                    {% endif %}
+                </section>
+            </div>
+        </section>
+
+        {% if related_products %}
+        <section class="product-related-section" aria-labelledby="related-title">
+            <header class="product-detail-section-heading">
+                <h2 id="related-title">相关推荐产品</h2>
+            </header>
+            <div class="product-related-grid">
+                {% for item in related_products %}
+                <article class="product-related-card">
+                    <img src="{{ url_for('static', filename=item.image) }}" alt="{{ item.name }}" loading="lazy">
+                    <div>
+                        <h3>{{ item.name }}</h3>
+                        <p>{{ item.description }}</p>
+                        <a href="{{ url_for('product_detail', product_id=item.id) }}">查看详情</a>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='js/product_detail.js') }}"></script>
+{% endblock %}

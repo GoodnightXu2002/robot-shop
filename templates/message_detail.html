@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}消息详情 - 智联机器人商城{% endblock %}
+
+{% block page_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/message_center.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/account_frame.css') }}">
+{% endblock %}
+
+{% block content %}
+{% set type_labels = {
+    'order': '订单通知',
+    'consultation': '咨询通知',
+    'appointment': '预约通知',
+    'logistics': '物流通知',
+    'system': '系统通知'
+} %}
+<section class="message-standalone-page account-page">
+    <div class="message-standalone-shell account-container account-container--narrow">
+        <header class="message-standalone-header account-page-header">
+            <div>
+                <span>消息通知</span>
+                <h1 class="account-page-title">消息详情</h1>
+                <p class="account-page-description">查看订单、咨询与服务状态通知。</p>
+            </div>
+            <a class="message-standalone-back account-back-link" href="{{ url_for('messages') }}"><span aria-hidden="true">←</span> 返回消息通知</a>
+        </header>
+
+        <article class="message-detail-panel message-standalone-panel" aria-label="消息详情">
+            <div class="message-detail-content">
+                <div class="message-detail-heading">
+                    <div>
+                        <span>{{ type_labels.get(notification.type, '其他通知') }}</span>
+                        <h2>{{ notification.title }}</h2>
+                    </div>
+                    <span class="message-read-status{% if notification.is_read %} is-read{% endif %}">{{ "已读" if notification.is_read else "未读" }}</span>
+                </div>
+                <time class="message-detail-time" datetime="{{ notification.created_at.isoformat() }}">{{ notification.created_at.strftime("%Y-%m-%d %H:%M") }}</time>
+                <div class="message-detail-body">{{ notification.content }}</div>
+                {% if notification.link %}
+                <a class="message-detail-action" href="{{ notification.link }}">查看相关页面</a>
+                {% endif %}
+            </div>
+        </article>
+    </div>
+</section>
+{% endblock %}

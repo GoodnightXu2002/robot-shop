@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}首页 - 智联机器人商城{% endblock %}
+
+{% block page_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+<section id="homeHeroCarousel" class="carousel slide home-hero" data-bs-ride="carousel" data-bs-interval="6000" data-bs-pause="hover" data-bs-keyboard="true" aria-roledescription="轮播" aria-label="智联机器人首页推荐">
+    <div class="carousel-inner h-100">
+        {% set slides = [
+            {"image": "images/home/hero-service.webp", "title": "智能机器人，让服务更高效", "description": "覆盖餐饮配送、迎宾接待、商业清洁与智能巡检等真实场景。", "button": "探索产品", "url": url_for('products'), "alt": "明亮酒店空间中的智能配送机器人"},
+            {"image": "images/home/hero-solutions.webp", "title": "面向真实场景的机器人解决方案", "description": "根据行业需求匹配合适设备、应用方案与服务支持。", "button": "查看应用场景", "url": "#scenes", "alt": "现代商业空间中的智能清洁巡检机器人"},
+            {"image": "images/home/hero-support.webp", "title": "从选购到服务，一站式完成", "description": "在线咨询、服务预约、订单管理与消息通知集中完成。", "button": "立即咨询", "url": url_for('consultations'), "alt": "服务中心内的机器人与专业技术人员"}
+        ] %}
+        {% for slide in slides %}
+        <article class="carousel-item{% if loop.first %} active{% endif %} h-100" aria-label="第 {{ loop.index }} 张，共 3 张">
+            <img class="home-hero-image" src="{{ url_for('static', filename=slide.image) }}" alt="{{ slide.alt }}"{% if loop.first %} fetchpriority="high"{% endif %}>
+            <div class="home-hero-shade" aria-hidden="true"></div>
+            <div class="home-hero-content">
+                <div class="home-hero-copy">
+                    {% if loop.first %}<h1>{{ slide.title }}</h1>{% else %}<h2>{{ slide.title }}</h2>{% endif %}
+                    <p>{{ slide.description }}</p>
+                </div>
+                <a class="home-hero-cta" href="{{ slide.url }}">{{ slide.button }}</a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    <button class="carousel-control-prev home-hero-arrow" type="button" data-bs-target="#homeHeroCarousel" data-bs-slide="prev" aria-label="上一张">
+        <span class="home-hero-chevron" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next home-hero-arrow" type="button" data-bs-target="#homeHeroCarousel" data-bs-slide="next" aria-label="下一张">
+        <span class="home-hero-chevron" aria-hidden="true"></span>
+    </button>
+    <div class="carousel-indicators home-hero-indicators">
+        <button type="button" data-bs-target="#homeHeroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="转到第 1 张"></button>
+        <button type="button" data-bs-target="#homeHeroCarousel" data-bs-slide-to="1" aria-label="转到第 2 张"></button>
+        <button type="button" data-bs-target="#homeHeroCarousel" data-bs-slide-to="2" aria-label="转到第 3 张"></button>
+    </div>
+    <p class="visually-hidden" aria-live="polite" data-carousel-status>当前为第 1 张，共 3 张</p>
+</section>
+
+<section class="home-section home-products" aria-labelledby="featured-products-title">
+    <div class="home-container">
+        <header class="home-section-heading">
+            <div><p class="home-eyebrow">精选设备</p><h2 id="featured-products-title">为真实业务选择合适的机器人</h2></div>
+            <a class="home-text-link" href="{{ url_for('products') }}">浏览全部产品</a>
+        </header>
+        <div class="home-product-grid">
+            {% for product in products %}
+            <article class="home-product-card">
+                <a class="home-product-media" href="{{ url_for('product_detail', product_id=product.id) }}" aria-label="查看 {{ product.name }}">
+                    <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" loading="lazy">
+                </a>
+                <div class="home-product-info">
+                    <div><p>{{ product.category }}</p><h3><a href="{{ url_for('product_detail', product_id=product.id) }}">{{ product.name }}</a></h3></div>
+                    <span class="home-product-price">￥{{ "%.2f"|format(product.price) }}</span>
+                </div>
+            </article>
+            {% else %}<p class="home-empty">暂无可展示产品，请稍后再来。</p>{% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="home-section home-scenes" id="scenes" aria-labelledby="scenes-title">
+    <div class="home-container">
+        <header class="home-section-heading home-section-heading-light">
+            <div><p class="home-eyebrow">应用场景</p><h2 id="scenes-title">让机器人进入每一个需要效率的空间</h2></div>
+            <p class="home-heading-description">从前厅服务到后场运营，以真实动线与任务需求匹配设备。</p>
+        </header>
+        <div class="home-scene-grid">
+            <a class="home-scene home-scene-large" href="{{ url_for('products', category='餐饮服务/配送机器人') }}">
+                <img src="{{ url_for('static', filename='images/home/hero-service.webp') }}" alt="餐饮酒店服务机器人应用" loading="lazy">
+                <span class="home-scene-overlay" aria-hidden="true"></span><span class="home-scene-copy"><strong>餐饮与酒店</strong><small>配送 · 迎宾 · 客房服务</small></span>
+            </a>
+            <a class="home-scene" href="{{ url_for('products', category='清洁机器人') }}">
+                <img src="{{ url_for('static', filename='images/home/hero-solutions.webp') }}" alt="商业空间清洁机器人应用" loading="lazy">
+                <span class="home-scene-overlay" aria-hidden="true"></span><span class="home-scene-copy"><strong>商业清洁</strong><small>商场 · 园区 · 公共空间</small></span>
+            </a>
+            <a class="home-scene" href="{{ url_for('products', category='四足机器人') }}">
+                <img src="{{ url_for('static', filename='images/home/hero-support.webp') }}" alt="教育与巡检机器人服务支持" loading="lazy">
+                <span class="home-scene-overlay" aria-hidden="true"></span><span class="home-scene-copy"><strong>教育与巡检</strong><small>教学 · 园区 · 设备巡查</small></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="home-section home-process" aria-labelledby="process-title">
+    <div class="home-container">
+        <header class="home-section-heading home-process-heading"><div><p class="home-eyebrow">服务流程</p><h2 id="process-title">从需求到交付，每一步都清晰</h2></div></header>
+        <ol class="home-process-list">
+            {% for title, text in [("了解需求", "梳理场地、任务与运营目标"), ("选择产品", "匹配设备规格与应用方案"), ("咨询或预约", "确认价格、部署与服务安排"), ("订单与售后", "集中管理订单、通知与维护")] %}
+            <li><span>{{ "%02d"|format(loop.index) }}</span><div><h3>{{ title }}</h3><p>{{ text }}</p></div></li>
+            {% endfor %}
+        </ol>
+    </div>
+</section>
+
+<section class="home-final-cta" aria-labelledby="final-cta-title">
+    <div class="home-container home-final-cta-inner">
+        <div class="home-final-copy"><p class="home-eyebrow">开始行动</p><h2 id="final-cta-title">找到适合业务现场的机器人</h2><p>查看现有产品，或告诉我们你的场景与需求。</p></div>
+        <div class="home-final-actions"><a class="home-button home-button-light" href="{{ url_for('products') }}">浏览产品</a><a class="home-button home-button-outline" href="{{ url_for('consultations') }}">在线咨询</a></div>
+    </div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}<script src="{{ url_for('static', filename='js/home.js') }}"></script>{% endblock %}

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}消息通知 - 智联机器人商城{% endblock %}
+
+{% block page_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/message_center.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/account_frame.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="message-center-page account-page" data-message-center>
+    <div class="message-center-shell account-container account-container--wide">
+        <header class="account-page-header message-center-header">
+            <div>
+                <h1 class="account-page-title">消息通知</h1>
+                <p class="account-page-description">集中查看订单、咨询与服务状态通知。</p>
+            </div>
+            <a class="account-back-link" href="{{ url_for('user_center') }}"><span aria-hidden="true">←</span> 返回用户中心</a>
+        </header>
+        {% set type_labels = {
+            'order': '订单通知',
+            'consultation': '咨询通知',
+            'appointment': '预约通知',
+            'logistics': '物流通知',
+            'system': '系统通知'
+        } %}
+        {% set type_state = namespace(values=[]) %}
+        {% for item in notifications %}
+            {% if item.type and item.type not in type_state.values %}
+                {% set type_state.values = type_state.values + [item.type] %}
+            {% endif %}
+        {% endfor %}
+
+        <section class="message-list-panel" aria-label="消息列表">
+            <div class="message-tabs" role="tablist" aria-label="消息分类">
+                <button class="is-active" type="button" role="tab" aria-selected="true" data-message-filter="all">全部</button>
+                {% for type_value in type_state.values %}
+                <button type="button" role="tab" aria-selected="false" data-message-filter="{{ type_value }}">{{ type_labels.get(type_value, '其他通知') }}</button>
+                {% endfor %}
+            </div>
+
+            <div class="message-list" data-message-list>
+                {% for item in notifications %}
+                <a class="message-list-item{% if loop.first %} is-active{% endif %}{% if not item.is_read %} is-unread{% endif %}"
+                   href="{{ url_for('message_detail', notification_id=item.id) }}"
+                   data-message-item
+                   data-message-id="{{ item.id }}"
+                   data-message-title="{{ item.title }}"
+                   data-message-content="{{ item.content }}"
+                   data-message-type="{{ item.type }}"
+                   data-message-type-label="{{ type_labels.get(item.type, '其他通知') }}"
+                   data-message-time="{{ item.created_at.strftime('%Y-%m-%d %H:%M') }}"
+                   data-message-link="{{ item.link or '' }}"
+                   data-message-read-url="{{ url_for('mark_message_read', notification_id=item.id) }}"
+                   data-message-unread="{{ 'true' if not item.is_read else 'false' }}"{% if loop.first %} aria-current="true"{% endif %}>
+                    <span class="message-item-main">
+                        <span class="message-item-heading">
+                            <strong>{{ item.title }}</strong>
+                            <time datetime="{{ item.created_at.isoformat() }}">{{ item.created_at.strftime("%Y-%m-%d %H:%M") }}</time>
+                        </span>
+                        <span class="message-item-summary">
+                            <span>{{ item.content }}</span>
+                            {% if not item.is_read %}<i aria-label="未读"></i>{% endif %}
+                        </span>
+                        <span class="message-item-type">{{ type_labels.get(item.type, '其他通知') }}</span>
+                    </span>
+                </a>
+                {% else %}
+                <div class="message-list-empty account-empty-state account-empty-state--fill">
+                    <strong>暂无消息</strong>
+                    <p>订单、咨询或服务状态更新后会显示在这里。</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="message-detail-panel" aria-live="polite" aria-label="消息详情">
+            {% if notifications %}
+            {% set selected = notifications[0] %}
+            <div class="message-detail-content" data-message-detail>
+                <div class="message-detail-heading">
+                    <div>
+                        <span data-message-detail-type>{{ type_labels.get(selected.type, '其他通知') }}</span>
+                        <h2 data-message-detail-title>{{ selected.title }}</h2>
+                    </div>
+                    <span class="message-read-status{% if selected.is_read %} is-read{% endif %}" data-message-detail-status>{{ "已读" if selected.is_read else "未读" }}</span>
+                </div>
+                <time class="message-detail-time" datetime="{{ selected.created_at.isoformat() }}" data-message-detail-time>{{ selected.created_at.strftime("%Y-%m-%d %H:%M") }}</time>
+                <div class="message-detail-body" data-message-detail-body>{{ selected.content }}</div>
+                <a class="message-detail-action{% if not selected.link %} is-hidden{% endif %}" href="{{ selected.link or '#' }}" data-message-detail-action>查看相关页面</a>
+            </div>
+            {% else %}
+            <div class="message-detail-empty account-empty-state account-empty-state--fill" data-message-detail-empty>
+                <h2>暂无消息</h2>
+                <p>收到新通知后，可在这里查看完整内容。</p>
+            </div>
+            {% endif %}
+        </section>
+    </div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='js/message_center.js') }}"></script>
+{% endblock %}

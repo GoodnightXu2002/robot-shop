@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="Medical delivery robot">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ccfbf1"/>
+      <stop offset="1" stop-color="#fee2e2"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="420" fill="url(#bg)"/>
+  <rect x="200" y="118" width="240" height="218" rx="30" fill="#fff" stroke="#0f766e" stroke-width="10"/>
+  <rect x="238" y="64" width="164" height="82" rx="32" fill="#0f766e"/>
+  <circle cx="286" cy="106" r="12" fill="#fff"/>
+  <circle cx="354" cy="106" r="12" fill="#fff"/>
+  <rect x="292" y="178" width="56" height="120" rx="8" fill="#ef4444"/>
+  <rect x="260" y="210" width="120" height="56" rx="8" fill="#ef4444"/>
+  <circle cx="260" cy="352" r="23" fill="#0f172a"/>
+  <circle cx="380" cy="352" r="23" fill="#0f172a"/>
+  <text x="320" y="324" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#0f766e">MED</text>
+</svg>

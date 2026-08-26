@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}购物车 - 智联机器人商城{% endblock %}
+
+{% block page_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cart.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/account_frame.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="cart-page account-page" data-cart-page>
+    <div class="cart-shell account-container account-container--wide">
+        <header class="cart-page-heading account-page-header">
+            <div>
+                <h1 class="account-page-title">购物车</h1>
+                <p class="account-page-description">{% if items %}核对商品信息和购买数量后统一结算。{% else %}这里还没有商品，去产品中心挑选机器人吧。{% endif %}</p>
+            </div>
+            <a class="cart-heading-link account-back-link" href="{{ url_for('user_center') }}"><span aria-hidden="true">←</span> 返回用户中心</a>
+        </header>
+
+        {% if items %}
+        <div class="cart-layout">
+            <section class="cart-table-card" aria-labelledby="cart-list-title">
+                <div class="cart-card-heading">
+                    <div>
+                        <h2 id="cart-list-title">购物车商品</h2>
+                        <span>共 {{ items|length }} 款，{{ cart_count }} 件</span>
+                    </div>
+                    {% if items|selectattr('product.stock', 'le', 10)|list %}
+                    <p>部分商品库存较少，请及时确认数量。</p>
+                    {% endif %}
+                </div>
+
+                <div class="cart-table-scroll">
+                    <div class="cart-table-head" aria-hidden="true">
+                        <span>商品</span><span>库存状态</span><span>单价</span><span>数量</span><span>小计</span><span></span>
+                    </div>
+                    <div class="cart-item-list">
+                        {% for item in items %}
+                        <article class="cart-item-row">
+                            <div class="cart-product-cell">
+                                <a class="cart-product-image" href="{{ url_for('product_detail', product_id=item.product.id) }}" tabindex="-1" aria-hidden="true">
+                                    <img src="{{ url_for('static', filename=item.product.image) }}" alt="">
+                                </a>
+                                <div class="cart-product-copy">
+                                    <a href="{{ url_for('product_detail', product_id=item.product.id) }}">{{ item.product.name }}</a>
+                                    <span>{{ item.product.category }}</span>
+                                </div>
+                            </div>
+
+                            <div class="cart-stock-cell">
+                                {% if item.product.stock <= 0 %}
+                                <span class="cart-stock is-out">暂时缺货</span>
+                                {% elif item.product.stock <= 10 %}
+                                <span class="cart-stock is-low">库存紧张（剩余 {{ item.product.stock }}）</span>
+                                {% else %}
+                                <span class="cart-stock is-ready">有货</span>
+                                {% endif %}
+                            </div>
+                            <div class="cart-money account-money">￥{{ "{:,.2f}".format(item.product.price) }}</div>
+
+                            <div class="cart-quantity-cell">
+                                <form method="post" action="{{ url_for('update_cart', item_id=item.id) }}" class="cart-quantity-form" data-cart-quantity-form>
+                                    <div class="cart-quantity-control">
+                                        <button type="button" data-cart-decrease aria-label="减少 {{ item.product.name }} 的数量"{% if item.quantity <= 1 or item.product.stock <= 0 %} disabled{% endif %}>−</button>
+                                        <input type="number" name="quantity" min="1" max="{{ item.product.stock }}" value="{{ item.quantity }}" aria-label="{{ item.product.name }} 的数量" data-cart-quantity-input{% if item.product.stock <= 0 %} disabled{% endif %}>
+                                        <button type="button" data-cart-increase aria-label="增加 {{ item.product.name }} 的数量"{% if item.quantity >= item.product.stock or item.product.stock <= 0 %} disabled{% endif %}>+</button>
+                                    </div>
+                                    <button class="visually-hidden" type="submit" data-cart-quantity-submit>更新数量</button>
+                                </form>
+                            </div>
+
+                            <div class="cart-money cart-subtotal account-money">￥{{ "{:,.2f}".format(item.product.price * item.quantity) }}</div>
+                            <form method="post" action="{{ url_for('remove_cart', item_id=item.id) }}" class="cart-remove-form">
+                                <button type="submit" aria-label="删除 {{ item.product.name }}" title="删除商品">删除</button>
+                            </form>
+                        </article>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+
+            <aside class="cart-checkout-panel" aria-labelledby="cart-checkout-title">
+                <div class="cart-checkout-heading"><h2 id="cart-checkout-title">订单结算</h2></div>
+                <div class="cart-checkout-body">
+                    <div class="cart-checkout-count">
+                        <span>购物车商品</span><strong>{{ cart_count }}</strong><small>件</small>
+                    </div>
+                    <dl class="cart-price-summary">
+                        <div><dt>商品金额</dt><dd class="account-money">￥{{ "{:,.2f}".format(total_price) }}</dd></div>
+                        <div class="cart-total-row"><dt>合计</dt><dd class="account-money">￥{{ "{:,.2f}".format(total_price) }}</dd></div>
+                    </dl>
+                    <form method="post" action="{{ url_for('checkout_cart') }}" class="cart-checkout-form">
+                        <button type="submit">生成订单并支付</button>
+                    </form>
+                    <a class="cart-continue-button" href="{{ url_for('products') }}">继续选购</a>
+                </div>
+            </aside>
+        </div>
+        {% else %}
+        <section class="cart-empty-state" aria-labelledby="cart-empty-title">
+            <h2 id="cart-empty-title">购物车还是空的</h2>
+            <p>前往产品中心浏览机器人产品，加入购物车后可在这里统一结算。</p>
+            <a href="{{ url_for('products') }}">前往产品中心</a>
+        </section>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+{% endblock %}

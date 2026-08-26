@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}数据统计 - 智联机器人商城{% endblock %}
+
+{% block content %}
+<section class="admin-shell">
+    <div class="container-fluid">
+        <div class="row g-0">
+            {% include "admin/_sidebar.html" %}
+            <div class="col-lg-10 admin-main">
+                <div class="admin-title"><div><h1 class="fw-bold">数据统计</h1><p>使用表格和进度条展示系统经营数据。</p></div></div>
+                <div class="admin-page-actions">
+                    <button type="button" class="btn btn-outline-secondary back-btn" onclick="goBackOr('{{ url_for('admin_dashboard') }}')">← 返回上一级</button>
+                </div>
+                <div class="row g-4 mb-4">
+                    <div class="col-md-4 col-xl-2"><div class="stat-card"><span>总销售额</span><strong class="money">￥{{ "%.0f"|format(stats.total_sales) }}</strong></div></div>
+                    <div class="col-md-4 col-xl-2"><div class="stat-card"><span>订单数量</span><strong>{{ stats.order_count }}</strong></div></div>
+                    <div class="col-md-4 col-xl-2"><div class="stat-card"><span>已完成订单</span><strong>{{ stats.completed_order_count }}</strong></div></div>
+                    <div class="col-md-4 col-xl-3"><div class="stat-card"><span>待处理咨询</span><strong>{{ stats.pending_consultation_count }}</strong></div></div>
+                    <div class="col-md-4 col-xl-3"><div class="stat-card"><span>待确认预约</span><strong>{{ stats.pending_appointment_count }}</strong></div></div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-xl-6">
+                        <div class="content-panel h-100">
+                            <h2 class="h5 fw-bold mb-3">热门产品排行</h2>
+                            {% for product in hot_products %}
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between"><span>{{ loop.index }}. {{ product.name }}</span><span>销量 {{ product.sales }}</span></div>
+                                <div class="progress"><div class="progress-bar" style="width: {{ product.sales if product.sales < 100 else 100 }}%"></div></div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="content-panel h-100">
+                            <h2 class="h5 fw-bold mb-3">分类产品数量统计</h2>
+                            {% for item in category_stats %}
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between"><span>{{ item.category }}</span><span>{{ item.count }} 个</span></div>
+                                <div class="progress"><div class="progress-bar bg-success" style="width: {{ item.percent }}%"></div></div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="content-panel h-100">
+                            <h2 class="h5 fw-bold mb-3">订单状态统计</h2>
+                            {% for item in order_status_stats %}
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between"><span>{{ item.status }}</span><span>{{ item.count }} 单</span></div>
+                                <div class="progress"><div class="progress-bar" style="width: {{ item.percent }}%"></div></div>
+                            </div>
+                            {% else %}
+                            <div class="empty-state py-3">暂无订单状态数据。</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="content-panel">
+                            <h2 class="h5 fw-bold mb-3">最近 7 条订单记录</h2>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead><tr><th>订单编号</th><th>用户</th><th>产品</th><th>数量</th><th>金额</th><th>状态</th><th>时间</th></tr></thead>
+                                    <tbody>
+                                    {% for order in recent_orders %}
+                                    <tr><td>{{ order.order_no }}</td><td>{{ order.user.username }}</td><td>{{ order.product.name }}</td><td>{{ order.quantity }}</td><td>￥{{ "%.2f"|format(order.total_price) }}</td><td>{{ order.status }}</td><td>{{ order.created_at.strftime("%Y-%m-%d %H:%M") }}</td></tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,28 @@
+<aside class="col-lg-2 admin-sidebar">
+    <div class="admin-brand">
+        <span class="brand-mark">R</span>
+        <div>
+            <strong>Robot Admin</strong>
+            <small>管理控制台</small>
+        </div>
+    </div>
+    <div class="admin-user-panel">
+        <div class="admin-avatar">{{ current_user.username[:1]|upper }}</div>
+        <div>
+            <strong>{{ current_user.username }}</strong>
+            <small>系统管理员</small>
+        </div>
+    </div>
+    <div class="admin-nav-title">主导航</div>
+    <a href="{{ url_for('admin_dashboard') }}" class="{% if request.endpoint == 'admin_dashboard' %}active{% endif %}"><span>01</span>后台首页</a>
+    <a href="{{ url_for('admin_products') }}" class="{% if request.endpoint in ['admin_products', 'admin_product_new', 'admin_product_edit'] %}active{% endif %}"><span>02</span>产品管理</a>
+    <a href="{{ url_for('admin_orders') }}" class="{% if request.endpoint == 'admin_orders' %}active{% endif %}"><span>03</span>订单管理</a>
+    <a href="{{ url_for('admin_reviews') }}" class="{% if request.endpoint == 'admin_reviews' %}active{% endif %}"><span>04</span>评价管理</a>
+    <a href="{{ url_for('admin_users') }}" class="{% if request.endpoint == 'admin_users' %}active{% endif %}"><span>05</span>用户管理</a>
+    <a href="{{ url_for('admin_consultations') }}" class="{% if request.endpoint == 'admin_consultations' %}active{% endif %}"><span>06</span>咨询管理</a>
+    <a href="{{ url_for('admin_appointments') }}" class="{% if request.endpoint == 'admin_appointments' %}active{% endif %}"><span>07</span>预约管理</a>
+    <a href="{{ url_for('admin_statistics') }}" class="{% if request.endpoint == 'admin_statistics' %}active{% endif %}"><span>08</span>数据统计</a>
+    <a href="{{ url_for('admin_ai_assistant') }}" class="{% if request.endpoint == 'admin_ai_assistant' %}active{% endif %}"><span>09</span>AI客服分析</a>
+    <a href="{{ url_for('admin_messages') }}" class="{% if request.endpoint == 'admin_messages' %}active{% endif %}"><span>10</span>消息通知{% if unread_admin_notifications %}<em>{{ unread_admin_notifications }}</em>{% endif %}</a>
+    <a href="{{ url_for('index') }}"><span>↗</span>返回前台</a>
+</aside>

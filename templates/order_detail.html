@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}订单详情 - 智联机器人商城{% endblock %}
+
+{% block page_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/order_detail.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/account_frame.css') }}">
+{% endblock %}
+
+{% block content %}
+{% set status_progress = {
+    "待支付": "订单已提交",
+    "待确认": "订单已提交",
+    "已支付": "支付成功",
+    "待发货": "支付成功",
+    "已确认": "仓库配货",
+    "已发货": "已发货",
+    "已完成": "已签收",
+    "已取消": "订单已提交"
+} %}
+{% set stored_index = logistics_steps.index(order.logistics_status) if order.logistics_status in logistics_steps else 0 %}
+{% set status_step = status_progress.get(order.status, "订单已提交") %}
+{% set status_index = logistics_steps.index(status_step) if status_step in logistics_steps else 0 %}
+{% set logistics_index = [stored_index, status_index]|max %}
+{% set payment_label = "待支付" if order.status == "待支付" else ("未支付" if order.status == "已取消" and not order.paid_at else ("支付成功" if order.paid_at or order.status in ["已支付", "待发货", "已确认", "已发货", "已完成"] else "支付状态待更新")) %}
+{% set account_status_class = "is-pending" if order.status == "待支付" else ("is-completed" if order.status == "已完成" else ("is-cancelled" if order.status == "已取消" else "is-processing")) %}
+{% set payment_status_class = "is-pending" if payment_label in ["待支付", "未支付"] else ("is-completed" if payment_label == "支付成功" else "is-muted") %}
+
+<section class="order-detail-page account-page" aria-labelledby="order-detail-title">
+    <div class="order-detail-container account-container account-container--narrow">
+        <header class="order-detail-heading account-page-header">
+            <div class="order-detail-heading-copy">
+                <h1 id="order-detail-title" class="account-page-title">订单详情</h1>
+                <p class="account-page-description">查看订单信息、支付状态和物流进度，便于跟踪订单全流程。</p>
+            </div>
+            <div class="order-detail-heading-actions">
+                <div class="order-detail-statuses" aria-label="订单状态和支付状态">
+                    <span class="order-detail-order-status account-status {{ account_status_class }}">{{ order.status }}</span>
+                    <span class="order-detail-payment-status account-status {{ payment_status_class }}">{{ payment_label }}</span>
+                </div>
+                <a class="order-detail-back account-back-link" href="{{ url_for('orders') }}"><span aria-hidden="true">←</span> 返回我的订单</a>
+            </div>
+        </header>
+
+        <article class="order-summary-card" aria-label="订单摘要">
+            <a class="order-summary-image" href="{{ url_for('product_detail', product_id=order.product.id) }}" aria-label="查看{{ order.product.name }}">
+                <img src="{{ url_for('static', filename=order.product.image) }}" alt="{{ order.product.name }}">
+            </a>
+            <div class="order-summary-content">
+                <h2 title="{{ order.product.name }}">{{ order.product.name }}</h2>
+                <div class="order-summary-facts">
+                    <div class="order-summary-fact order-summary-number">
+                        <span>订单编号</span>
+                        <strong>{{ order.order_no }}</strong>
+                    </div>
+                    <div class="order-summary-fact">
+                        <span>购买数量</span>
+                        <strong>{{ order.quantity }}</strong>
+                    </div>
+                    <div class="order-summary-fact">
+                        <span>订单金额</span>
+                        <strong class="order-summary-price account-money">￥{{ "{:,.2f}".format(order.total_price) }}</strong>
+                    </div>
+                    <div class="order-summary-fact">
+                        <span>创建时间</span>
+                        <strong>{{ order.created_at.strftime("%Y-%m-%d %H:%M") if order.created_at else "待更新" }}</strong>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <section class="order-logistics-card" aria-labelledby="order-logistics-title">
+            <h2 id="order-logistics-title" class="visually-hidden">物流进度</h2>
+            <div class="order-logistics-track" style="--order-progress: {{ (logistics_index / (logistics_steps|length - 1) * 100) if logistics_steps|length > 1 else 0 }}%;">
+                {% for step in logistics_steps %}
+                {% set node_class = "is-complete" if loop.index0 < logistics_index or (loop.last and order.status == "已完成") else ("is-current" if loop.index0 == logistics_index else "is-pending") %}
+                <div class="order-logistics-step {{ node_class }}">
+                    <span class="order-logistics-node" aria-hidden="true"></span>
+                    <strong>{{ step }}</strong>
+                    {% if step == "订单已提交" and order.created_at %}
+                    <time datetime="{{ order.created_at.isoformat() }}">{{ order.created_at.strftime("%Y-%m-%d") }}</time>
+                    {% elif step == "支付成功" and order.paid_at %}
+                    <time datetime="{{ order.paid_at.isoformat() }}">{{ order.paid_at.strftime("%Y-%m-%d") }}</time>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <div class="order-detail-columns">
+            <section class="order-information-card" aria-labelledby="order-information-title">
+                <h2 id="order-information-title">订单信息</h2>
+                <dl class="order-information-list">
+                    <div><dt>订单编号</dt><dd>{{ order.order_no }}</dd></div>
+                    <div><dt>产品名称</dt><dd title="{{ order.product.name }}">{{ order.product.name }}</dd></div>
+                    <div><dt>购买数量</dt><dd>{{ order.quantity }}</dd></div>
+                    <div><dt>订单金额</dt><dd class="account-money">￥{{ "{:,.2f}".format(order.total_price) }}</dd></div>
+                    <div><dt>订单状态</dt><dd>{{ order.status }}</dd></div>
+                    <div><dt>创建时间</dt><dd>{{ order.created_at.strftime("%Y-%m-%d %H:%M") if order.created_at else "待更新" }}</dd></div>
+                </dl>
+                {% if order.status == "待支付" %}
+                <div class="order-payment-action">
+                    <div><strong>订单等待支付</strong><span>完成支付后，订单将进入处理流程。</span></div>
+                    <a href="{{ url_for('payment', order_id=order.id) }}">去支付</a>
+                </div>
+                {% endif %}
+            </section>
+
+            <aside class="order-tip-card" aria-labelledby="order-tip-title">
+                <h2 id="order-tip-title">温馨提示</h2>
+                {% if order.status == "待支付" %}
+                <p>请在确认商品与金额无误后完成支付。支付成功后，我们将尽快为您安排发货。</p>
+                {% elif order.status == "已取消" %}
+                <p>当前订单已取消，无需继续支付或等待发货。如有疑问，请联系在线客服。</p>
+                {% elif order.status == "已完成" %}
+                <p>订单已完成。如需了解产品使用或售后服务，请联系在线客服。</p>
+                {% else %}
+                <p>支付成功后，我们将尽快为您安排发货，您可在物流进度中查看最新动态。</p>
+                {% endif %}
+                <p>如需修改订单或有任何疑问，请联系在线客服。</p>
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}

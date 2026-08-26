@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}产品中心 - 智联机器人商城{% endblock %}
+
+{% block page_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/products.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="products-page-v3" aria-label="产品中心">
+    <form class="products-catalog-layout" method="get" action="{{ url_for('products') }}">
+        <aside class="products-sidebar" aria-label="产品筛选">
+            <section class="products-sidebar-section">
+                <h2 class="products-sidebar-title">产品分类</h2>
+                <nav class="products-category-list" aria-label="产品分类">
+                    <a class="products-category-link{% if not current_category %} is-active{% endif %}"
+                       href="{{ url_for('products', q=keyword, sort=current_sort, stock_status=current_stock_status, min_price=min_price, max_price=max_price) }}"
+                       {% if not current_category %}aria-current="true"{% endif %}>
+                        <span class="products-category-mark products-category-mark-all" aria-hidden="true"></span>
+                        <span>全部产品</span>
+                    </a>
+                    {% for item in categories %}
+                    <a class="products-category-link{% if current_category == item.value %} is-active{% endif %}"
+                       href="{{ url_for('products', q=keyword, category=item.value, sort=current_sort, stock_status=current_stock_status, min_price=min_price, max_price=max_price) }}"
+                       {% if current_category == item.value %}aria-current="true"{% endif %}>
+                        <span class="products-category-mark" aria-hidden="true"></span>
+                        <span>{{ item.label }}</span>
+                    </a>
+                    {% endfor %}
+                </nav>
+            </section>
+
+            <section class="products-sidebar-section">
+                <h2 class="products-sidebar-title">库存状态</h2>
+                <div class="products-stock-list">
+                    {% set stock_filters = [("", "全部库存"), ("in_stock", "有库存"), ("low_stock", "低库存"), ("out_stock", "无库存")] %}
+                    {% for value, label in stock_filters %}
+                    <a class="products-stock-link{% if current_stock_status == value %} is-active{% endif %}"
+                       href="{{ url_for('products', q=keyword, category=current_category, sort=current_sort, stock_status=value, min_price=min_price, max_price=max_price) }}"
+                       {% if current_stock_status == value %}aria-current="true"{% endif %}>
+                        <span class="products-stock-dot" aria-hidden="true"></span>
+                        <span>{{ label }}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="products-sidebar-section products-price-section">
+                <h2 class="products-sidebar-title">价格范围（元）</h2>
+                <div class="products-price-fields">
+                    <label for="min_price" class="visually-hidden">最低价格</label>
+                    <input type="number" id="min_price" name="min_price" value="{{ min_price }}" min="0" step="0.01" inputmode="decimal" placeholder="最低价格">
+                    <span aria-hidden="true">—</span>
+                    <label for="max_price" class="visually-hidden">最高价格</label>
+                    <input type="number" id="max_price" name="max_price" value="{{ max_price }}" min="0" step="0.01" inputmode="decimal" placeholder="最高价格">
+                </div>
+            </section>
+        </aside>
+
+        <div class="products-main">
+            {% if current_category %}
+            <input type="hidden" name="category" value="{{ current_category }}">
+            {% endif %}
+
+            <div class="products-toolbar" aria-label="产品查询条件">
+                <label class="products-search-field" for="q">
+                    <span class="visually-hidden">搜索产品</span>
+                    <span class="products-search-icon" aria-hidden="true"></span>
+                    <input id="q" name="q" value="{{ keyword }}" placeholder="名称、简介或场景">
+                </label>
+
+                <label class="products-toolbar-field" for="sort">
+                    <span>排序</span>
+                    <select id="sort" name="sort">
+                        <option value="default" {% if current_sort == "default" %}selected{% endif %}>默认排序</option>
+                        <option value="price_asc" {% if current_sort == "price_asc" %}selected{% endif %}>价格从低到高</option>
+                        <option value="price_desc" {% if current_sort == "price_desc" %}selected{% endif %}>价格从高到低</option>
+                        <option value="stock_desc" {% if current_sort == "stock_desc" %}selected{% endif %}>库存从高到低</option>
+                        <option value="sales_desc" {% if current_sort == "sales_desc" %}selected{% endif %}>销量从高到低</option>
+                    </select>
+                </label>
+
+                <label class="products-toolbar-field" for="stock_status">
+                    <span>库存状态</span>
+                    <select id="stock_status" name="stock_status">
+                        <option value="" {% if not current_stock_status %}selected{% endif %}>全部库存</option>
+                        <option value="in_stock" {% if current_stock_status == "in_stock" %}selected{% endif %}>有库存</option>
+                        <option value="low_stock" {% if current_stock_status == "low_stock" %}selected{% endif %}>低库存</option>
+                        <option value="out_stock" {% if current_stock_status == "out_stock" %}selected{% endif %}>无库存</option>
+                    </select>
+                </label>
+
+                <button class="products-filter-submit" type="submit">查询产品</button>
+                <a class="products-filter-reset" href="{{ url_for('products') }}">重置</a>
+            </div>
+
+            <div class="products-result-bar" aria-live="polite">
+                <span>共找到 <strong>{{ products|length }}</strong> 个产品</span>
+                {% if current_category %}
+                <span class="products-current-filter">当前分类：{{ current_category }}</span>
+                {% endif %}
+            </div>
+
+            <div class="products-grid">
+                {% for product in products %}
+                <article class="products-card">
+                    <a class="products-card-media" href="{{ url_for('product_detail', product_id=product.id) }}" aria-label="查看 {{ product.name }} 详情">
+                        <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" loading="lazy" decoding="async">
+                    </a>
+                    <div class="products-card-body">
+                        <p class="products-card-category">{{ product.category }}</p>
+                        <h2 class="products-card-title">
+                            <a href="{{ url_for('product_detail', product_id=product.id) }}">{{ product.name }}</a>
+                        </h2>
+                        <div class="products-card-footer">
+                            <span class="products-card-price">￥{{ "%.2f"|format(product.price) }}</span>
+                            <a class="products-detail-link" href="{{ url_for('product_detail', product_id=product.id) }}">查看详情 <span aria-hidden="true">→</span></a>
+                        </div>
+                    </div>
+                </article>
+                {% else %}
+                <div class="products-empty-state">
+                    <span class="products-empty-mark" aria-hidden="true"></span>
+                    <p>没有找到符合条件的产品</p>
+                    <span>请调整关键词、分类、库存状态或价格范围后重新查询。</span>
+                    <a class="products-filter-reset" href="{{ url_for('products') }}">清除全部筛选</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </form>
+</section>
+{% endblock %}

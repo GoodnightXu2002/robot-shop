@@ -1,0 +1,571 @@
+.site-body .user-dashboard-page {
+    min-height: calc(100vh - 64px);
+    padding: 30px 0 56px;
+    background: #f4f6f9;
+    color: #172033;
+}
+
+.site-body .user-dashboard-shell {
+    display: grid;
+    grid-template-columns: 256px minmax(0, 1fr);
+    gap: 24px;
+    width: min(calc(100% - 48px), 1440px);
+    margin: 0 auto;
+}
+
+.site-body .user-account-sidebar {
+    min-width: 0;
+}
+
+.site-body .user-account-card {
+    position: sticky;
+    top: 96px;
+    overflow: hidden;
+    border: 1px solid #e6eaf0;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(26, 39, 66, .04);
+    text-align: center;
+}
+
+.site-body .user-avatar {
+    display: grid;
+    width: 76px;
+    height: 76px;
+    margin: 30px auto 14px;
+    border: 5px solid #f3f6fa;
+    border-radius: 50%;
+    place-items: center;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.site-body .user-account-name {
+    display: block;
+    margin-bottom: 28px;
+    color: #111827;
+    font-size: 18px;
+}
+
+.site-body .user-account-nav {
+    padding: 0 0 18px;
+    text-align: left;
+}
+
+.site-body .user-account-nav a {
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr) auto;
+    gap: 13px;
+    align-items: center;
+    min-height: 52px;
+    padding: 0 24px;
+    border-right: 3px solid transparent;
+    color: #42526b;
+    text-decoration: none;
+    transition: color .18s ease, background-color .18s ease;
+}
+
+.site-body .user-account-nav a:hover {
+    background: #f7f9fc;
+    color: #2563eb;
+}
+
+.site-body .user-account-nav a:focus-visible,
+.site-body .user-order-stats a:focus-visible,
+.site-body .user-table-action:focus-visible,
+.site-body .user-panel-heading a:focus-visible,
+.site-body .user-compact-card a:focus-visible,
+.site-body .user-compact-card button:focus-visible,
+.site-body .user-review-list a:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, .24);
+    outline-offset: 2px;
+}
+
+.site-body .user-account-nav a.is-active {
+    border-right-color: #2563eb;
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.site-body .user-account-nav svg,
+.site-body .user-order-stats svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+}
+
+.site-body .user-account-nav em {
+    color: #9aa6b6;
+    font-size: 12px;
+    font-style: normal;
+}
+
+.site-body .user-nav-divider {
+    display: block;
+    height: 1px;
+    margin: 8px 24px;
+    background: #edf0f4;
+}
+
+.site-body .user-dashboard-main {
+    display: grid;
+    min-width: 0;
+    gap: 24px;
+}
+
+.site-body .user-overview-card,
+.site-body .user-order-stats,
+.site-body .user-data-panel {
+    border: 1px solid #e6eaf0;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(26, 39, 66, .04);
+}
+
+.site-body .user-overview-card {
+    display: flex;
+    min-height: 154px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 36px;
+    padding: 32px 40px;
+}
+
+.site-body .user-welcome-copy {
+    flex: 1 1 auto;
+    min-width: 240px;
+}
+
+.site-body .user-welcome-copy h1 {
+    margin: 0 0 12px;
+    color: #111827;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+}
+
+.site-body .user-welcome-copy p {
+    margin: 0;
+    color: #96a2b4;
+    font-size: 14px;
+}
+
+.site-body .user-profile-facts {
+    display: flex;
+    flex: 0 1 auto;
+    align-items: stretch;
+    margin: 0;
+}
+
+.site-body .user-profile-facts div {
+    min-width: 180px;
+    padding: 4px 30px;
+    border-left: 1px solid #edf0f4;
+}
+
+.site-body .user-profile-facts dt {
+    margin-bottom: 9px;
+    color: #96a2b4;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.site-body .user-profile-facts dd {
+    overflow: hidden;
+    margin: 0;
+    color: #182033;
+    font-size: 16px;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.site-body .user-order-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: 30px 0;
+}
+
+.site-body .user-order-stats a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100px;
+    border-right: 1px solid #edf0f4;
+    color: #64748b;
+    text-align: center;
+    text-decoration: none;
+}
+
+.site-body .user-order-stats a:last-child {
+    border-right: 0;
+}
+
+.site-body .user-order-stats a:hover svg {
+    color: #2563eb;
+}
+
+.site-body .user-order-stats svg {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 12px;
+    color: #91a3bb;
+}
+
+.site-body .user-order-stats span {
+    color: #4b5870;
+    font-size: 14px;
+}
+
+.site-body .user-order-stats strong {
+    margin-top: 6px;
+    color: #2563eb;
+    font-size: 21px;
+    line-height: 1;
+}
+
+.site-body .user-data-panel {
+    overflow: hidden;
+}
+
+.site-body .user-panel-heading {
+    display: flex;
+    min-height: 68px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 0 28px;
+    border-bottom: 1px solid #edf0f4;
+}
+
+.site-body .user-panel-heading h2 {
+    margin: 0;
+    color: #111827;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.site-body .user-panel-heading a,
+.site-body .user-panel-heading > span {
+    color: #7a899e;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.site-body .user-panel-heading a:hover {
+    color: #2563eb;
+}
+
+.site-body .user-table-wrap {
+    overflow-x: auto;
+}
+
+.site-body .user-data-table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+.site-body .user-data-table th {
+    height: 58px;
+    padding: 0 24px;
+    background: #f8fafc;
+    color: #65748b;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.site-body .user-data-table td {
+    height: 86px;
+    padding: 14px 24px;
+    border-top: 1px solid #edf0f4;
+    color: #233047;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.site-body .user-data-table tbody tr:first-child td {
+    border-top: 0;
+}
+
+.site-body .user-data-table tbody tr:hover td {
+    background: #fbfcfe;
+}
+
+.site-body .user-orders-table th:nth-child(1) { width: 18%; }
+.site-body .user-orders-table th:nth-child(2) { width: 27%; }
+.site-body .user-orders-table th:nth-child(3) { width: 14%; }
+.site-body .user-orders-table th:nth-child(4) { width: 11%; }
+.site-body .user-orders-table th:nth-child(5) { width: 19%; }
+
+.site-body .user-order-number,
+.site-body .user-order-time {
+    color: #60708a !important;
+    white-space: nowrap;
+}
+
+.site-body .user-order-price {
+    color: #111827 !important;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.site-body .user-order-product {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #182033;
+    text-decoration: none;
+}
+
+.site-body .user-order-product > span {
+    display: grid;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    overflow: hidden;
+    border-radius: 6px;
+    background: #f5f7fa;
+    place-items: center;
+}
+
+.site-body .user-order-product img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.site-body .user-order-product strong,
+.site-body .user-services-table td:first-child strong {
+    display: block;
+    max-width: 220px;
+    overflow: hidden;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.site-body .user-order-product:hover,
+.site-body .user-table-action {
+    color: #2563eb;
+}
+
+.site-body .user-table-action {
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.site-body .user-table-action:hover {
+    text-decoration: underline;
+}
+
+.site-body .user-services-table th:nth-child(1) { width: 35%; }
+.site-body .user-services-table th:nth-child(2) { width: 15%; }
+.site-body .user-services-table th:nth-child(3) { width: 14%; }
+.site-body .user-services-table th:nth-child(4) { width: 22%; }
+
+.site-body .user-compact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    padding: 24px 28px;
+}
+
+.site-body .user-compact-card {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr) auto auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px;
+    border: 1px solid #edf0f4;
+    border-radius: 8px;
+}
+
+.site-body .user-compact-card > img {
+    width: 58px;
+    height: 58px;
+    object-fit: contain;
+}
+
+.site-body .user-compact-card div {
+    min-width: 0;
+}
+
+.site-body .user-compact-card strong,
+.site-body .user-compact-card span {
+    display: block;
+}
+
+.site-body .user-compact-card strong {
+    overflow: hidden;
+    color: #1b2638;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.site-body .user-compact-card span {
+    margin-top: 6px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.site-body .user-compact-card a,
+.site-body .user-compact-card button,
+.site-body .user-review-list a {
+    border: 0;
+    background: transparent;
+    color: #2563eb;
+    font-size: 13px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.site-body .user-compact-card button {
+    color: #8b96a8;
+}
+
+.site-body .user-review-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 28px;
+    padding: 8px 28px 22px;
+}
+
+.site-body .user-review-list article {
+    position: relative;
+    padding: 18px 0;
+    border-bottom: 1px solid #edf0f4;
+}
+
+.site-body .user-review-list article > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.site-body .user-review-list article > div span {
+    color: #f59e0b;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.site-body .user-review-list p {
+    margin: 10px 0;
+    color: #536178;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.site-body .user-review-list time {
+    color: #96a2b4;
+    font-size: 12px;
+}
+
+.site-body .user-review-list a {
+    float: right;
+}
+
+@media (max-width: 1199.98px) {
+    .site-body .user-dashboard-shell {
+        grid-template-columns: 232px minmax(0, 1fr);
+    }
+
+    .site-body .user-overview-card {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .site-body .user-profile-facts {
+        width: 100%;
+    }
+
+    .site-body .user-profile-facts div:first-child {
+        padding-left: 0;
+        border-left: 0;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .site-body .user-dashboard-shell {
+        grid-template-columns: 1fr;
+        width: min(calc(100% - 32px), 720px);
+    }
+
+    .site-body .user-account-card {
+        position: static;
+    }
+
+    .site-body .user-avatar,
+    .site-body .user-account-name {
+        display: none;
+    }
+
+    .site-body .user-account-nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 10px;
+    }
+
+    .site-body .user-account-nav a {
+        border-right: 0;
+        border-radius: 6px;
+    }
+
+    .site-body .user-nav-divider {
+        display: none;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .site-body .user-dashboard-page {
+        padding-top: 18px;
+    }
+
+    .site-body .user-overview-card {
+        padding: 24px;
+    }
+
+    .site-body .user-profile-facts {
+        flex-direction: column;
+    }
+
+    .site-body .user-profile-facts div,
+    .site-body .user-profile-facts div:first-child {
+        padding: 12px 0;
+        border-top: 1px solid #edf0f4;
+        border-left: 0;
+    }
+
+    .site-body .user-order-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px 0;
+    }
+
+    .site-body .user-order-stats a:nth-child(2) {
+        border-right: 0;
+    }
+
+    .site-body .user-compact-grid,
+    .site-body .user-review-list {
+        grid-template-columns: 1fr;
+    }
+
+    .site-body .user-compact-card {
+        grid-template-columns: 48px minmax(0, 1fr) auto;
+    }
+
+    .site-body .user-compact-card form {
+        grid-column: 3;
+    }
+}

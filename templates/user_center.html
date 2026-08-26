@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block title %}用户中心 - 智联机器人商城{% endblock %}
+
+{% block page_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/user_center.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/account_frame.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="user-dashboard-page account-page" aria-label="用户中心">
+    <div class="user-dashboard-shell account-container account-container--wide">
+        <aside class="user-account-sidebar">
+            <div class="user-account-card">
+                <div class="user-avatar" aria-hidden="true">{{ current_user.username[:1]|upper }}</div>
+                <strong class="user-account-name">{{ current_user.username }}</strong>
+
+                <nav class="user-account-nav" aria-label="账户导航">
+                    <a class="is-active" href="{{ url_for('user_center') }}" aria-current="page">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0Z"/></svg>
+                        <span>账户概览</span>
+                    </a>
+                    <a href="{{ url_for('orders') }}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+                        <span>我的订单</span><em>{{ stats.order_count }}</em>
+                    </a>
+                    <a href="{{ url_for('cart') }}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L20 8H7"/><circle cx="10" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg>
+                        <span>购物车</span>
+                    </a>
+                    <a href="#user-wishlist">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.8a5.5 5.5 0 0 0-7.8 0L12 5.9l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.4a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+                        <span>意向清单</span><em>{{ stats.wishlist_count }}</em>
+                    </a>
+                    <a href="#user-reviews">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v13H8l-4 4V4Z"/><path d="M8 9h8M8 13h5"/></svg>
+                        <span>我的评价</span><em>{{ stats.review_count }}</em>
+                    </a>
+                    <span class="user-nav-divider" aria-hidden="true"></span>
+                    <a href="{{ url_for('appointments', consultation=1, _anchor='service-support-consultation') }}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12a7 7 0 0 1 14 0v5a2 2 0 0 1-2 2h-2v-6h4M5 13h4v6H7a2 2 0 0 1-2-2v-5ZM12 21h3"/></svg>
+                        <span>在线咨询</span><em>{{ stats.consultation_count }}</em>
+                    </a>
+                    <a href="{{ url_for('appointments', _anchor='support-booking-title') }}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M8 15l2 2 5-5"/></svg>
+                        <span>服务预约</span><em>{{ stats.appointment_count }}</em>
+                    </a>
+                    <a href="{{ url_for('messages') }}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+                        <span>消息通知</span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <main class="user-dashboard-main">
+            <section class="user-overview-card">
+                <div class="user-welcome-copy">
+                    <h1 class="account-page-title">您好，{{ current_user.username }}</h1>
+                    <p class="account-page-description">欢迎来到智械机器人商城</p>
+                </div>
+                <dl class="user-profile-facts">
+                    {% if current_user.phone %}<div><dt>手机号</dt><dd>{{ current_user.phone }}</dd></div>{% endif %}
+                    {% if current_user.email %}<div><dt>邮箱</dt><dd>{{ current_user.email }}</dd></div>{% endif %}
+                    <div><dt>注册时间</dt><dd>{{ current_user.created_at.strftime("%Y-%m-%d") }}</dd></div>
+                </dl>
+            </section>
+
+            <section class="user-order-stats" aria-label="订单状态概览">
+                <a href="{{ url_for('orders') }}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 9h8M8 13h5"/></svg><span>待支付</span><strong>{{ order_status_counts.pending_payment }}</strong></a>
+                <a href="{{ url_for('orders') }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14v13H5zM8 4h8v3H8zM8 12h8"/></svg><span>待发货</span><strong>{{ order_status_counts.pending_shipment }}</strong></a>
+                <a href="{{ url_for('orders') }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7z"/><circle cx="7" cy="19" r="2"/><circle cx="17" cy="19" r="2"/></svg><span>待收货</span><strong>{{ order_status_counts.pending_receipt }}</strong></a>
+                <a href="{{ url_for('orders') }}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 12 2 2 5-5M8 17h8"/></svg><span>已完成</span><strong>{{ order_status_counts.completed }}</strong></a>
+            </section>
+
+            <section class="user-data-panel" aria-labelledby="recent-orders-title">
+                <header class="user-panel-heading"><h2 id="recent-orders-title">最近订单</h2><a href="{{ url_for('orders') }}">查看全部订单 <span aria-hidden="true">›</span></a></header>
+                <div class="user-table-wrap">
+                    <table class="user-data-table user-orders-table account-data-table">
+                        <thead><tr><th>订单号</th><th>商品</th><th>金额</th><th>状态</th><th>下单时间</th><th>操作</th></tr></thead>
+                        <tbody>
+                        {% for order in orders %}
+                        {% set status_class = 'is-pending' if order.status == '待支付' else ('is-completed' if order.status == '已完成' else ('is-cancelled' if order.status == '已取消' else 'is-processing')) %}
+                        <tr>
+                            <td class="user-order-number">{{ order.order_no }}</td>
+                            <td><a class="user-order-product" href="{{ url_for('product_detail', product_id=order.product.id) }}"><span><img src="{{ url_for('static', filename=order.product.image) }}" alt=""></span><strong>{{ order.product.name }}</strong></a></td>
+                            <td class="user-order-price account-money">￥{{ "{:,.2f}".format(order.total_price) }}</td>
+                            <td><span class="user-order-status account-status {{ status_class }}">{{ order.status }}</span></td>
+                            <td class="user-order-time">{{ order.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+                            <td>{% if order.status == '待支付' %}<a class="user-table-action" href="{{ url_for('payment', order_id=order.id) }}">去支付</a>{% elif order.status == '已发货' %}<a class="user-table-action" href="{{ url_for('order_detail', order_id=order.id) }}">查看物流</a>{% else %}<a class="user-table-action" href="{{ url_for('order_detail', order_id=order.id) }}">查看订单</a>{% endif %}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="6">
+                            <div class="user-empty-state account-empty-state account-empty-state--compact">
+                                <strong>暂无订单</strong>
+                                <p>从产品中心下单后，订单记录会显示在这里。</p>
+                                <a href="{{ url_for('products') }}">浏览产品</a>
+                            </div>
+                        </td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="user-data-panel" aria-labelledby="recent-services-title">
+                <header class="user-panel-heading"><h2 id="recent-services-title">最近服务记录</h2></header>
+                <div class="user-table-wrap">
+                    <table class="user-data-table user-services-table account-data-table">
+                        <thead><tr><th>咨询/服务内容</th><th>类型</th><th>状态</th><th>创建时间</th><th>操作</th></tr></thead>
+                        <tbody>
+                        {% for record in service_records %}
+                        <tr>
+                            <td><strong>{{ record.title }}</strong></td>
+                            <td>{{ '在线咨询' if record.kind == 'consultation' else '服务预约' }}</td>
+                            <td><span class="user-service-status account-status {% if record.status in ['已回复', '已完成', '已关闭'] %}is-completed{% elif record.status in ['待处理', '待确认'] %}is-pending{% else %}is-processing{% endif %}">{{ record.status }}</span></td>
+                            <td class="user-order-time">{{ record.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+                            <td>{% if record.kind == 'consultation' %}<a class="user-table-action" href="{{ url_for('appointments', consultation=1, _anchor='service-support-consultation') }}">查看详情</a>{% else %}<a class="user-table-action" href="{{ url_for('appointments', _anchor='service-support-progress') }}">查看详情</a>{% endif %}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="5">
+                            <div class="user-empty-state account-empty-state account-empty-state--compact">
+                                <strong>暂无服务记录</strong>
+                                <p>提交咨询或服务预约后，可在这里查看处理进度。</p>
+                                <a href="{{ url_for('appointments') }}">前往服务支持</a>
+                            </div>
+                        </td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="user-data-panel" id="user-wishlist" aria-labelledby="wishlist-title">
+                <header class="user-panel-heading"><h2 id="wishlist-title">意向清单</h2><span>{{ stats.wishlist_count }} 件产品</span></header>
+                <div class="user-compact-grid">
+                    {% for item in wishlist_items %}
+                    <article class="user-compact-card">
+                        <img src="{{ url_for('static', filename=item.product.image) }}" alt="{{ item.product.name }}">
+                        <div><strong>{{ item.product.name }}</strong><span class="account-money">￥{{ "{:,.2f}".format(item.product.price) }}</span></div>
+                        <a href="{{ url_for('product_detail', product_id=item.product.id) }}">查看商品</a>
+                        <form method="post" action="{{ url_for('remove_wishlist', wishlist_id=item.id) }}"><button type="submit">移除</button></form>
+                    </article>
+                    {% else %}
+                    <div class="user-empty-state account-empty-state account-empty-state--compact">
+                        <strong>暂无意向产品</strong>
+                        <p>添加感兴趣的商品后，可在这里集中查看。</p>
+                        <a href="{{ url_for('products') }}">浏览产品</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="user-data-panel" id="user-reviews" aria-labelledby="reviews-title">
+                <header class="user-panel-heading"><h2 id="reviews-title">我的评价</h2><span>{{ stats.review_count }} 条评价</span></header>
+                <div class="user-review-list">
+                    {% for review in reviews %}
+                    <article><div><strong>{{ review.product.name }}</strong><span aria-label="{{ review.rating }} 分">{{ review.rating }} 分</span></div><p>{{ review.content }}</p><time>{{ review.created_at.strftime("%Y-%m-%d %H:%M") }}</time><a href="{{ url_for('product_detail', product_id=review.product.id, _anchor='reviews') }}">查看商品评价</a></article>
+                    {% else %}
+                    <div class="user-empty-state account-empty-state account-empty-state--compact">
+                        <strong>暂无评价记录</strong>
+                        <p>完成订单并发表评价后，记录会显示在这里。</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </main>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="Education companion robot">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#fef3c7"/>
+      <stop offset="1" stop-color="#bfdbfe"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="420" fill="url(#bg)"/>
+  <rect x="198" y="120" width="244" height="216" rx="34" fill="#fff" stroke="#2563eb" stroke-width="10"/>
+  <rect x="238" y="64" width="164" height="82" rx="32" fill="#2563eb"/>
+  <circle cx="286" cy="106" r="12" fill="#fff"/>
+  <circle cx="354" cy="106" r="12" fill="#fff"/>
+  <path d="M282 134c22 16 54 16 76 0" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M245 200h150v86H245z" fill="#dbeafe"/>
+  <path d="M245 200c45-22 105-22 150 0v86c-45-22-105-22-150 0z" fill="#60a5fa"/>
+  <circle cx="260" cy="352" r="23" fill="#0f172a"/>
+  <circle cx="380" cy="352" r="23" fill="#0f172a"/>
+  <text x="320" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#2563eb">LEARN</text>
+</svg>

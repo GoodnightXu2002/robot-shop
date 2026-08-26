@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}我的订单 - 智联机器人商城{% endblock %}
+
+{% block page_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/orders.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/account_frame.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="order-list-page account-page" aria-labelledby="order-list-title">
+    <div class="order-list-container account-container account-container--wide">
+        <header class="order-list-header account-page-header">
+            <div>
+                <h1 id="order-list-title" class="account-page-title">我的订单</h1>
+                <p class="account-page-description">查看从产品详情页创建的订单记录和处理状态。</p>
+            </div>
+            <a href="{{ url_for('user_center') }}" class="order-back-link account-back-link"><span aria-hidden="true">←</span> 返回用户中心</a>
+        </header>
+
+        <nav class="order-filter-bar" aria-label="订单状态筛选">
+            <a class="{% if current_status == 'all' %}is-active{% endif %}" href="{{ url_for('orders', status='all') }}"{% if current_status == 'all' %} aria-current="page"{% endif %}>全部订单 <strong>{{ order_counts.all }}</strong></a>
+            <a class="{% if current_status == 'pending' %}is-active{% endif %}" href="{{ url_for('orders', status='pending') }}"{% if current_status == 'pending' %} aria-current="page"{% endif %}>待支付 <strong class="is-error">{{ order_counts.pending }}</strong></a>
+            <a class="{% if current_status == 'processing' %}is-active{% endif %}" href="{{ url_for('orders', status='processing') }}"{% if current_status == 'processing' %} aria-current="page"{% endif %}>处理中 <strong class="is-primary">{{ order_counts.processing }}</strong></a>
+            <a class="{% if current_status == 'completed' %}is-active{% endif %}" href="{{ url_for('orders', status='completed') }}"{% if current_status == 'completed' %} aria-current="page"{% endif %}>已完成 <strong>{{ order_counts.completed }}</strong></a>
+        </nav>
+
+        <section class="order-table-card" aria-label="订单记录">
+            <div class="order-table-wrap">
+                <table class="order-list-table account-data-table">
+                    <colgroup>
+                        <col class="order-col-number"><col class="order-col-product"><col class="order-col-quantity"><col class="order-col-price">
+                        <col class="order-col-status"><col class="order-col-logistics"><col class="order-col-time"><col class="order-col-actions">
+                    </colgroup>
+                    <thead>
+                    <tr><th>订单编号</th><th>产品</th><th>数量</th><th>总价</th><th>状态</th><th>物流</th><th>创建时间</th><th>操作</th></tr>
+                    </thead>
+                    <tbody>
+                    {% for order in orders %}
+                    {% set status_class = 'is-pending' if order.status == '待支付' else ('is-completed' if order.status == '已完成' else ('is-cancelled' if order.status == '已取消' else 'is-processing')) %}
+                    <tr>
+                        <td><span class="order-number">{{ order.order_no }}</span></td>
+                        <td>
+                            <a class="order-product" href="{{ url_for('product_detail', product_id=order.product.id) }}">
+                                <span class="order-product-image"><img src="{{ url_for('static', filename=order.product.image) }}" alt=""></span>
+                                <span class="order-product-copy"><strong title="{{ order.product.name }}">{{ order.product.name }}</strong><small title="{{ order.product.category }}">{{ order.product.category }}</small></span>
+                            </a>
+                        </td>
+                        <td class="order-align-center">{{ order.quantity }}</td>
+                        <td class="order-price account-money">￥{{ "{:,.2f}".format(order.total_price) }}</td>
+                        <td class="order-align-center"><span class="order-status account-status {{ status_class }}">{{ order.status }}</span></td>
+                        <td class="order-logistics" title="{{ order.logistics_status or '待更新' }}">{{ order.logistics_status or "待更新" }}</td>
+                        <td class="order-created-at">{{ order.created_at.strftime("%Y-%m-%d %H:%M") if order.created_at else "待更新" }}</td>
+                        <td>
+                            <div class="order-row-actions">
+                                <a class="order-detail-link" href="{{ url_for('order_detail', order_id=order.id) }}">详情</a>
+                                {% if order.status == '待支付' %}<a class="order-pay-link" href="{{ url_for('payment', order_id=order.id) }}">支付</a>{% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="8">
+                        <div class="order-empty-state account-empty-state account-empty-state--panel">
+                            <strong>当前筛选下暂无订单</strong>
+                            <p>可以切换其他状态查看订单，或返回全部订单。</p>
+                            <a href="{{ url_for('orders', status='all') }}">查看全部订单</a>
+                        </div>
+                    </td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <footer class="order-table-footer">
+                <span>共 {{ pagination.total }} 条</span>
+                {% if pagination.pages > 1 %}
+                <nav class="order-pagination" aria-label="订单分页">
+                    {% if pagination.has_prev %}<a href="{{ url_for('orders', status=current_status, page=pagination.prev_num) }}" aria-label="上一页">‹</a>{% else %}<span aria-disabled="true">‹</span>{% endif %}
+                    {% for page_number in pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                        {% if page_number %}
+                            <a class="{% if page_number == pagination.page %}is-active{% endif %}" href="{{ url_for('orders', status=current_status, page=page_number) }}"{% if page_number == pagination.page %} aria-current="page"{% endif %}>{{ page_number }}</a>
+                        {% else %}<span class="order-page-gap" aria-hidden="true">…</span>{% endif %}
+                    {% endfor %}
+                    {% if pagination.has_next %}<a href="{{ url_for('orders', status=current_status, page=pagination.next_num) }}" aria-label="下一页">›</a>{% else %}<span aria-disabled="true">›</span>{% endif %}
+                </nav>
+                {% endif %}
+            </footer>
+        </section>
+    </div>
+</section>
+{% endblock %}

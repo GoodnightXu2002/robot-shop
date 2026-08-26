@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="Warehouse transport robot">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#fef3c7"/>
+      <stop offset="1" stop-color="#fed7aa"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="420" fill="url(#bg)"/>
+  <rect x="160" y="210" width="320" height="108" rx="28" fill="#fff" stroke="#ea580c" stroke-width="10"/>
+  <rect x="230" y="102" width="180" height="110" rx="18" fill="#fb923c"/>
+  <rect x="258" y="128" width="124" height="58" rx="10" fill="#fff7ed"/>
+  <path d="M210 246h220" stroke="#fdba74" stroke-width="20" stroke-linecap="round"/>
+  <circle cx="240" cy="334" r="28" fill="#0f172a"/>
+  <circle cx="400" cy="334" r="28" fill="#0f172a"/>
+  <text x="320" y="173" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#ea580c">AGV</text>
+</svg>

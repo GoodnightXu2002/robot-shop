@@ -1,0 +1,335 @@
+{% extends "base.html" %}
+{% block title %}服务支持 - 智联机器人商城{% endblock %}
+
+{% block page_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/service_support.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="service-support-page" aria-label="服务支持">
+    <div class="service-support-container">
+        <section class="support-diagnosis" aria-labelledby="support-diagnosis-title">
+            <img class="support-robot-art" src="{{ url_for('static', filename='images/robot-line.png') }}" alt="智能客服机器人线稿">
+            <div class="support-diagnosis-main">
+                <h1 id="support-diagnosis-title">先描述问题，我们帮您判断下一步</h1>
+                <form class="support-diagnosis-form" data-support-diagnosis-form>
+                    <label class="visually-hidden" for="support-diagnosis-input">描述您遇到的问题</label>
+                    <input id="support-diagnosis-input" data-support-diagnosis-input type="text" maxlength="300" autocomplete="off" placeholder="例如：机器人无法正常充电">
+                    <button type="submit" data-support-diagnosis-submit>开始诊断</button>
+                </form>
+                <ol class="support-steps" aria-label="服务支持流程">
+                    <li class="is-active" data-support-step="describe"><span>1</span><strong>描述问题</strong></li>
+                    <li data-support-step="advice"><span>2</span><strong>获取建议</strong></li>
+                    <li data-support-step="booking"><span>3</span><strong>预约服务</strong></li>
+                </ol>
+            </div>
+        </section>
+
+        <div class="support-workspace">
+            <section class="support-panel support-ai-panel" aria-labelledby="support-ai-title">
+                <div class="support-panel-head">
+                    <h2 id="support-ai-title">AI 建议 <svg class="support-title-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7L12 3Z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16Z"/></svg></h2>
+                </div>
+                <div class="support-ai-result" data-support-diagnosis-result>
+                    <p class="support-ai-status">请先描述问题，AI 会根据现有客服能力给出初步建议。</p>
+                    <div class="support-ai-card">
+                        <div class="support-ai-mark">AI</div>
+                        <div>
+                            <h3>建议先完成问题描述</h3>
+                            <p>例如填写“机器人无法正常充电”“配送机器人路线异常”等，系统会返回可执行的排查方向。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="support-ai-actions">
+                    <div class="support-or-divider"><span>或</span></div>
+                    <button class="support-outline-button" type="button" data-support-booking-focus>预约专业服务 <span aria-hidden="true">›</span></button>
+                </div>
+            </section>
+
+            <section class="support-panel support-booking-panel" aria-labelledby="support-booking-title">
+                <div class="support-panel-head">
+                    <h2 id="support-booking-title">预约专业服务</h2>
+                    <svg class="support-title-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M9 15l2 2 4-4"/></svg>
+                </div>
+                <form class="support-booking-form" method="post" data-support-booking-form>
+                    <label class="support-field" for="service_type">
+                        <span>服务类型</span>
+                        <select id="service_type" name="service_type" required>
+                            {% for item in service_types %}
+                            <option value="{{ item }}"{% if appointment_form.service_type == item %} selected{% endif %}>{{ item }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <div class="support-form-row">
+                        <label class="support-field" for="appointment_date">
+                            <span>预约日期</span>
+                            <input type="date" id="appointment_date" name="appointment_date" value="{{ appointment_form.appointment_date }}" min="{{ appointment_min_date }}" required>
+                        </label>
+                        <label class="support-field" for="time_slot">
+                            <span>预约时间段</span>
+                            <select id="time_slot" name="time_slot" required>
+                                {% for slot in time_slots %}
+                                <option value="{{ slot }}"{% if appointment_form.time_slot == slot %} selected{% endif %}>{{ slot }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </div>
+                    <label class="support-field" for="address">
+                        <span>服务地址</span>
+                        <input id="address" name="address" value="{{ appointment_form.address }}" placeholder="请输入详细服务地址">
+                    </label>
+                    <div class="support-form-row">
+                        <label class="support-field" for="contact_name">
+                            <span>联系人</span>
+                            <input id="contact_name" name="contact_name" value="{{ appointment_form.contact_name }}" placeholder="请输入联系人" required>
+                        </label>
+                        <label class="support-field" for="contact">
+                            <span>联系电话</span>
+                            <input id="contact" name="contact" value="{{ appointment_form.contact }}" placeholder="请输入联系方式" required>
+                        </label>
+                    </div>
+                    <label class="support-field" for="remark">
+                        <span>补充问题描述（选填）</span>
+                        <textarea id="remark" name="remark" rows="3" data-support-remark placeholder="可填写设备型号、故障现象、现场环境等补充信息。">{{ appointment_form.remark }}</textarea>
+                    </label>
+                    <button class="support-primary-button" type="submit">提交预约</button>
+                </form>
+            </section>
+        </div>
+
+        <section class="support-quick-actions" aria-label="服务支持辅助入口">
+            <a class="support-action-card" data-support-bottom-consult href="#service-support-consultation">
+                <span class="support-action-icon">人工</span>
+                <strong>仍需人工帮助？</strong>
+                <small>专业客服为您提供一对一支持。</small>
+                <em>咨询人工方案</em>
+            </a>
+            <a class="support-action-card" href="#service-support-progress">
+                <span class="support-action-icon">进度</span>
+                <strong>查询服务进度</strong>
+                <small>随时查看您的服务单处理进度。</small>
+                <em>查询服务进度</em>
+            </a>
+        </section>
+
+        <section class="support-panel support-consultation-section" id="service-support-consultation" data-support-consultation-section aria-labelledby="support-consultation-title"{% if not show_consultation %} hidden{% endif %}>
+            <div class="support-panel-head">
+                <h2 id="support-consultation-title">人工咨询</h2>
+                <span>咨询与回复记录</span>
+            </div>
+            {% if source_from_ai %}
+            <div class="support-consultation-notice">已根据 AI 建议生成咨询草稿，确认信息后即可提交。</div>
+            {% endif %}
+            <div class="support-consultation-grid">
+                <form class="support-booking-form support-consultation-form" method="post" action="{{ url_for('consultations') }}" data-support-consultation-form>
+                    <label class="support-field" for="consult_product_id">
+                        <span>关联产品</span>
+                        <select id="consult_product_id" name="product_id">
+                            <option value="">不关联产品</option>
+                            {% for product in products %}
+                            <option value="{{ product.id }}"{% if selected_product_id == product.id %} selected{% endif %}>{{ product.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <div class="support-form-row">
+                        <label class="support-field" for="consult_name">
+                            <span>联系人</span>
+                            <input id="consult_name" name="name" value="{{ current_user.username }}" required>
+                        </label>
+                        <label class="support-field" for="consult_contact">
+                            <span>联系电话</span>
+                            <input id="consult_contact" name="contact" value="{{ current_user.phone or current_user.email or '' }}" required>
+                        </label>
+                    </div>
+                    <label class="support-field" for="consult_title">
+                        <span>咨询标题</span>
+                        <input id="consult_title" name="title" value="{{ prefill_title }}" maxlength="150" data-support-consultation-title placeholder="例如：想了解送餐机器人报价" required>
+                    </label>
+                    <label class="support-field" for="consult_content">
+                        <span>咨询内容</span>
+                        <textarea id="consult_content" name="content" rows="5" maxlength="800" data-support-consultation-content placeholder="请描述采购场景、预算范围、服务需求等信息。" required>{{ prefill_content }}</textarea>
+                    </label>
+                    <button class="support-primary-button" type="submit">提交咨询</button>
+                </form>
+
+                <div class="support-consultation-records">
+                    <div class="support-section-head">
+                        <h2>咨询记录</h2>
+                        <span>进行中 {{ active_consultations|length }} 条</span>
+                    </div>
+                    <div class="support-record-list">
+                        {% for item in active_consultations %}
+                        <article class="support-record-card support-consultation-record">
+                            <div class="support-record-title">
+                                <h3>{{ item.title }}</h3>
+                                <span>{{ item.status }}</span>
+                            </div>
+                            <p>{{ item.content }}</p>
+                            <div class="support-record-meta">
+                                提交时间：{{ item.created_at.strftime("%Y-%m-%d %H:%M") }}
+                                {% if item.product %}<br>关联产品：<a href="{{ url_for('product_detail', product_id=item.product.id) }}">{{ item.product.name }}</a>{% endif %}
+                            </div>
+                            {% if item.admin_reply %}
+                            <div class="support-note"><strong>管理员回复：</strong>{{ item.admin_reply }}</div>
+                            {% endif %}
+                        </article>
+                        {% else %}
+                        <div class="support-empty">暂无进行中的咨询。</div>
+                        {% endfor %}
+                    </div>
+
+                    {% if archived_consultations %}
+                    <div class="accordion support-archive support-consultation-archive" id="consultationArchive">
+                        <div class="accordion-item">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#consultationArchiveBody">
+                                    查看已归档咨询（{{ archived_consultations|length }}）
+                                </button>
+                            </h3>
+                            <div id="consultationArchiveBody" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    <div class="support-record-list">
+                                        {% for item in archived_consultations %}
+                                        <article class="support-record-card support-consultation-record is-archived">
+                                            <div class="support-record-title">
+                                                <h3>{{ item.title }}</h3>
+                                                <span>{{ item.status }}</span>
+                                            </div>
+                                            <p>{{ item.content }}</p>
+                                            <div class="support-record-meta">提交时间：{{ item.created_at.strftime("%Y-%m-%d %H:%M") }}</div>
+                                            {% if item.admin_reply %}
+                                            <div class="support-note"><strong>管理员回复：</strong>{{ item.admin_reply }}</div>
+                                            {% endif %}
+                                        </article>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <section class="support-progress-section" id="service-support-progress" aria-labelledby="support-progress-title">
+            <div class="support-section-head">
+                <h2 id="support-progress-title">服务进度</h2>
+                {% if latest_appointment %}<span>{{ latest_appointment.status }}</span>{% endif %}
+            </div>
+            {% if latest_appointment %}
+            {% set latest = latest_appointment %}
+            {% set latest_index = progress_steps.index(latest.status) if latest.status in progress_steps else 0 %}
+            <article class="support-latest-record">
+                <div>
+                    <strong>{{ latest.service_type }}</strong>
+                    <p>{{ latest.appointment_date or latest.appointment_time }} {{ latest.time_slot or "" }} / {{ latest.address or "未填写地址" }}</p>
+                </div>
+                <div class="support-record-meta">联系人：{{ latest.contact_name or current_user.username }}　电话：{{ latest.contact }}</div>
+            </article>
+            <ol class="support-service-progress">
+                {% for step in progress_steps %}
+                <li class="{% if loop.index0 <= latest_index %}is-active{% endif %}">
+                    <span>{{ loop.index }}</span>
+                    <strong>{{ step }}</strong>
+                </li>
+                {% endfor %}
+            </ol>
+            {% else %}
+            <div class="support-empty">暂无预约记录。</div>
+            {% endif %}
+        </section>
+
+        <section class="support-records-grid" aria-label="预约记录">
+            <div class="support-record-panel">
+                <div class="support-section-head">
+                    <h2>进行中的预约</h2>
+                    <span>进行中 {{ active_appointments|length }} 条</span>
+                </div>
+                <div class="support-record-list">
+                    {% for item in active_appointments %}
+                    {% set current_index = progress_steps.index(item.status) if item.status in progress_steps else 0 %}
+                    <article class="support-record-card">
+                        <div class="support-record-title">
+                            <h3>{{ item.service_type }}</h3>
+                            <span>{{ item.status }}</span>
+                        </div>
+                        <p>{{ item.address or "未填写地址" }}</p>
+                        <div class="support-record-meta">
+                            预约日期：{{ item.appointment_date or item.appointment_time }}　时间段：{{ item.time_slot or "-" }}<br>
+                            联系人：{{ item.contact_name or current_user.username }}　电话：{{ item.contact }}
+                        </div>
+                        <ol class="support-mini-progress">
+                            {% for step in progress_steps %}
+                            <li class="{% if loop.index0 <= current_index %}is-active{% endif %}"><span>{{ loop.index }}</span>{{ step }}</li>
+                            {% endfor %}
+                        </ol>
+                        {% if item.remark %}
+                        <div class="support-note"><strong>备注：</strong>{{ item.remark }}</div>
+                        {% endif %}
+                        {% if item.process_note %}
+                        <div class="support-note"><strong>处理备注：</strong>{{ item.process_note }}</div>
+                        {% endif %}
+                    </article>
+                    {% else %}
+                    <div class="support-empty">暂无进行中的预约。</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="support-record-panel">
+                <div class="support-section-head">
+                    <h2>历史预约</h2>
+                    <span>已归档 {{ archived_appointments|length }} 条</span>
+                </div>
+                <div class="accordion support-archive" id="appointmentArchive">
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#appointmentArchiveBody">
+                                查看已完成或已取消的历史预约
+                            </button>
+                        </h3>
+                        <div id="appointmentArchiveBody" class="accordion-collapse collapse">
+                            <div class="accordion-body">
+                                <div class="support-record-list">
+                                    {% for item in archived_appointments %}
+                                    {% set current_index = progress_steps.index(item.status) if item.status in progress_steps else 0 %}
+                                    <article class="support-record-card is-archived">
+                                        <div class="support-record-title">
+                                            <h3>{{ item.service_type }}</h3>
+                                            <span>{{ item.status }}</span>
+                                        </div>
+                                        <p>{{ item.address or "未填写地址" }}</p>
+                                        <div class="support-record-meta">
+                                            预约日期：{{ item.appointment_date or item.appointment_time }}　时间段：{{ item.time_slot or "-" }}<br>
+                                            联系人：{{ item.contact_name or current_user.username }}　电话：{{ item.contact }}
+                                        </div>
+                                        <ol class="support-mini-progress">
+                                            {% for step in progress_steps %}
+                                            <li class="{% if loop.index0 <= current_index %}is-active{% endif %}"><span>{{ loop.index }}</span>{{ step }}</li>
+                                            {% endfor %}
+                                        </ol>
+                                        {% if item.remark %}
+                                        <div class="support-note"><strong>备注：</strong>{{ item.remark }}</div>
+                                        {% endif %}
+                                        {% if item.process_note %}
+                                        <div class="support-note"><strong>处理备注：</strong>{{ item.process_note }}</div>
+                                        {% endif %}
+                                    </article>
+                                    {% else %}
+                                    <div class="support-empty">暂无已完成归档。</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='js/service_support.js') }}"></script>
+{% endblock %}

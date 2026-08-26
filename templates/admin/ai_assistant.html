@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}AI客服分析 - 智联机器人商城{% endblock %}
+
+{% block content %}
+<section class="admin-shell">
+    <div class="container-fluid">
+        <div class="row g-0">
+            {% include "admin/_sidebar.html" %}
+            <div class="col-lg-10 admin-main">
+                <div class="admin-title">
+                    <div>
+                        <h1 class="fw-bold">AI客服分析</h1>
+                        <p>沉淀智能导购会话、识别高意向问题，并为人工咨询处理提供线索。</p>
+                    </div>
+                </div>
+                <div class="admin-page-actions">
+                    <button type="button" class="btn btn-outline-secondary back-btn" onclick="goBackOr('{{ url_for('admin_dashboard') }}')">← 返回上一级</button>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-xl"><div class="stat-card"><span>总会话数</span><strong>{{ stats.total }}</strong></div></div>
+                    <div class="col-md-6 col-xl"><div class="stat-card"><span>今日会话</span><strong>{{ stats.today }}</strong></div></div>
+                    <div class="col-md-6 col-xl"><div class="stat-card"><span>匿名会话</span><strong>{{ stats.anonymous }}</strong></div></div>
+                    <div class="col-md-6 col-xl"><div class="stat-card"><span>产品相关</span><strong>{{ stats.product_related }}</strong></div></div>
+                    <div class="col-md-6 col-xl"><div class="stat-card"><span>转人工线索</span><strong>{{ stats.handoff }}</strong></div></div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-xl-6">
+                        <div class="content-panel h-100">
+                            <h2 class="h5 fw-bold mb-3">问题意图分布</h2>
+                            {% for item in intent_stats %}
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1"><span>{{ item.label }}</span><span>{{ item.count }} 次</span></div>
+                                <div class="progress"><div class="progress-bar" style="width: {{ item.percent }}%"></div></div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="content-panel h-100">
+                            <h2 class="h5 fw-bold mb-3">被咨询产品排行</h2>
+                            {% for item in product_stats %}
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1"><span>{{ item.name }}</span><span>{{ item.count }} 次</span></div>
+                                <div class="progress"><div class="progress-bar bg-success" style="width: {{ item.percent }}%"></div></div>
+                            </div>
+                            {% else %}
+                            <div class="empty-state py-3">暂无关联产品的 AI 会话。</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-panel mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="h5 fw-bold mb-0">高意向转人工线索</h2>
+                        <a href="{{ url_for('admin_consultations') }}">查看正式咨询</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead><tr><th>时间</th><th>用户</th><th>问题</th><th>关联产品</th><th>页面</th></tr></thead>
+                            <tbody>
+                            {% for log in lead_logs %}
+                            <tr>
+                                <td>{{ log.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+                                <td>{{ log.user.username if log.user else "游客" }}</td>
+                                <td>{{ log.question }}</td>
+                                <td>{% if log.product %}<a href="{{ url_for('product_detail', product_id=log.product.id) }}">{{ log.product.name }}</a>{% else %}-{% endif %}</td>
+                                <td>{{ log.page_url or "-" }}</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="5"><div class="empty-state py-3">暂无需要重点跟进的 AI 会话。</div></td></tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="content-panel">
+                    <h2 class="h5 fw-bold mb-3">最近 AI 会话记录</h2>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead><tr><th>时间</th><th>用户</th><th>问题</th><th>AI回复摘要</th><th>来源页面</th></tr></thead>
+                            <tbody>
+                            {% for log in ai_logs %}
+                            <tr>
+                                <td>{{ log.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+                                <td>{{ log.user.username if log.user else "游客" }}</td>
+                                <td>{{ log.question }}</td>
+                                <td>{{ log.answer[:90] }}{% if log.answer|length > 90 %}...{% endif %}</td>
+                                <td>{{ log.page_url or "-" }}</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="5"><div class="empty-state py-3">暂无 AI 会话记录。</div></td></tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

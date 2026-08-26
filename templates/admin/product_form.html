@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} - 智联机器人商城{% endblock %}
+
+{% block content %}
+<section class="admin-shell">
+    <div class="container-fluid">
+        <div class="row g-0">
+            {% include "admin/_sidebar.html" %}
+            <div class="col-lg-10 admin-main">
+                <div class="admin-title"><div><h1 class="fw-bold">{{ title }}</h1><p>维护完整产品资料，用于前台展示和后台统计。</p></div></div>
+                <div class="form-card">
+                    <form method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6"><label class="form-label">产品名称</label><input class="form-control" name="name" value="{{ product.name if product else '' }}" required></div>
+                            <div class="col-md-6"><label class="form-label">分类</label><input class="form-control" name="category" value="{{ product.category if product else '' }}" required></div>
+                            <div class="col-md-4"><label class="form-label">品牌</label><input class="form-control" name="brand" value="{{ product.brand if product else '' }}" placeholder="例如：宇树科技 Unitree"></div>
+                            <div class="col-md-4"><label class="form-label">国家/地区</label><input class="form-control" name="country_region" value="{{ product.country_region if product else '' }}" placeholder="例如：中国 / 美国"></div>
+                            <div class="col-md-4"><label class="form-label">资料来源链接</label><input class="form-control" name="source_url" value="{{ product.source_url if product else '' }}" placeholder="官网或产品资料页"></div>
+                            <div class="col-md-3"><label class="form-label">价格</label><input type="number" step="0.01" min="0" class="form-control" name="price" value="{{ product.price if product else 0 }}" required></div>
+                            <div class="col-md-3"><label class="form-label">库存</label><input type="number" min="0" class="form-control" name="stock" value="{{ product.stock if product else 0 }}" required></div>
+                            <div class="col-md-3"><label class="form-label">销量</label><input type="number" min="0" class="form-control" name="sales" value="{{ product.sales if product else 0 }}" required></div>
+                            <div class="col-md-3"><label class="form-label">图标路径</label><input class="form-control" name="image" value="{{ product.image if product else 'images/robot-food.svg' }}" required></div>
+                            <div class="col-md-3"><label class="form-label">产品型号</label><input class="form-control" name="model" value="{{ product.model if product else '' }}"></div>
+                            <div class="col-md-3"><label class="form-label">尺寸</label><input class="form-control" name="size" value="{{ product.size if product else '' }}"></div>
+                            <div class="col-md-2"><label class="form-label">续航时间</label><input class="form-control" name="battery_life" value="{{ product.battery_life if product else '' }}"></div>
+                            <div class="col-md-2"><label class="form-label">充电时间</label><input class="form-control" name="charge_time" value="{{ product.charge_time if product else '' }}"></div>
+                            <div class="col-md-2"><label class="form-label">运行速度</label><input class="form-control" name="speed" value="{{ product.speed if product else '' }}"></div>
+                            <div class="col-12"><label class="form-label">简介</label><textarea class="form-control" name="description" rows="2" required>{{ product.description if product else '' }}</textarea></div>
+                            <div class="col-12"><label class="form-label">详细描述</label><textarea class="form-control" name="detail" rows="3">{{ product.detail if product else '' }}</textarea></div>
+                            <div class="col-md-6"><label class="form-label">视频地址</label><input class="form-control" name="video_url" value="{{ product.video_url if product else '' }}" placeholder="可填写 iframe 视频地址，也可留空显示占位"></div>
+                            <div class="col-md-6"><label class="form-label">视频说明</label><input class="form-control" name="video_desc" value="{{ product.video_desc if product else '' }}" placeholder="产品演示视频说明"></div>
+                            <div class="col-12"><label class="form-label">演示链接</label><input class="form-control" name="demo_url" value="{{ product.demo_url if product else '' }}" placeholder="公开视频、官网演示页或资料页链接"></div>
+                            <div class="col-md-6"><label class="form-label">产品特点</label><textarea class="form-control" name="features" rows="6" placeholder="每行一个特点">{{ product.features if product else '' }}</textarea></div>
+                            <div class="col-md-6"><label class="form-label">适用场景</label><textarea class="form-control" name="scene" rows="6" placeholder="每行一个场景" required>{{ product.scene if product else '' }}</textarea></div>
+                            <div class="col-md-6">
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" name="is_hot" id="is_hot" {% if product and product.is_hot %}checked{% endif %}><label class="form-check-label" for="is_hot">设为热门</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" name="is_active" id="is_active" {% if not product or product.is_active %}checked{% endif %}><label class="form-check-label" for="is_active">上架展示</label></div>
+                            </div>
+                        </div>
+                        <div class="mt-4 d-flex gap-2">
+                            <button class="btn btn-primary" type="submit">保存</button>
+                            <a class="btn btn-outline-secondary" href="{{ url_for('admin_products') }}">返回</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
