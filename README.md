@@ -185,11 +185,17 @@ python scripts/check_project.py
 
 ## Production Deployment
 
-生产环境采用 Nginx 反向代理与 systemd 管理的 Gunicorn 服务：
+项目已真实部署至阿里云 ECS（Alibaba Cloud ECS，Ubuntu 22.04），可通过 [Live Demo](https://robot.webxu.cn) 访问。
 
 ```text
-Internet → Nginx → Gunicorn → Flask → SQLite
+Internet → HTTPS/Nginx → Gunicorn → Flask → SQLite
 ```
+
+- Nginx 提供反向代理，并将 HTTP 请求自动跳转至 HTTPS。
+- systemd 管理 Gunicorn 服务，运行 Flask 应用。
+- Let's Encrypt + Certbot 提供 HTTPS 证书与自动续期。
+- SQLite 用于数据存储，已配置每日自动备份。
+- SSH ED25519 Key 用于服务器管理。
 
 可复用的 systemd 与 Nginx 示例配置位于 [`deploy/`](deploy/)。生产环境变量通过未纳入版本控制的 `.env` 提供。
 
@@ -234,9 +240,9 @@ python -m pytest
 - 支付为模拟流程，不接入支付网关，也不会产生真实扣款。
 - 物流为模拟状态流转，不接入真实物流服务。
 - 产品、库存、订单及服务数据用于 Demo 展示。
-- SQLite 主要面向当前本地 Demo / Portfolio 环境。
+- SQLite 用于当前 Demo / Portfolio 的数据存储，主要面向小规模演示场景。
 - OpenAI API 是可选能力；未配置时使用本地规则和数据库上下文。
-- 当前项目不声明生产级部署、高并发或真实商业支付能力。
+- 项目已完成真实公网部署，但不宣称高可用、高并发、商业级支付或大规模生产能力。
 
 ## 版本信息
 
