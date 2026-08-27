@@ -75,11 +75,11 @@ Robot Shop 是一个使用 Flask 构建的机器人销售与服务管理 Web 项
 
 ### 产品中心
 
-![Robot Shop 产品中心](docs/screenshots/products-final-1920x1080.png)
+![Robot Shop 产品中心](docs/screenshots/products-portfolio-final.png)
 
 ### 服务支持与在线咨询
 
-![Robot Shop 服务支持](docs/screenshots/service-support-final-1366x768.png)
+![Robot Shop 服务支持](docs/screenshots/service-support-portfolio-final.png)
 
 ## 架构与业务流程
 
