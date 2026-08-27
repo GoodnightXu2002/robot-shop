@@ -1,5 +1,7 @@
 # Robot Shop
 
+[![Tests](https://github.com/GoodnightXu2002/robot-shop/actions/workflows/tests.yml/badge.svg)](https://github.com/GoodnightXu2002/robot-shop/actions/workflows/tests.yml)
+
 ### 机器人销售与服务管理平台
 
 一个基于 Flask 的全栈 Portfolio 项目，展示机器人产品销售、用户服务、后台运营与可选 AI 助手的完整 Web 业务流程。
