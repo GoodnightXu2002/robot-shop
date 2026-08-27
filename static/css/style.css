@@ -1052,10 +1052,6 @@ main {
 }
 
 .admin-thumb {
-    width: 76px;
-    height: 54px;
-    object-fit: cover;
-    border-radius: 10px;
     background: #11141B;
     border: 1px solid var(--line);
 }
@@ -2138,8 +2134,6 @@ body::before {
 }
 
 .admin-thumb {
-    width: 86px;
-    height: 62px;
     padding: 7px;
     box-sizing: border-box;
     object-fit: contain;
