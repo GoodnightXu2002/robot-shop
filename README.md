@@ -4,6 +4,8 @@
 
 一个基于 Flask 的全栈 Portfolio 项目，展示机器人产品销售、用户服务、后台运营与可选 AI 助手的完整 Web 业务流程。
 
+**[Live Demo](https://robot.webxu.cn)**
+
 **当前版本：** `v1.4-portfolio-release`
 
 ![Robot Shop 首页](docs/screenshots/homepage-final-1920x1080.png)
