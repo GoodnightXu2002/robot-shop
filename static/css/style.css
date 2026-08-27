@@ -2125,18 +2125,6 @@ body::before {
         0 14px 30px rgba(0, 0, 0, 0.26);
 }
 
-.product-img {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    display: block;
-    object-fit: contain;
-    object-position: center;
-    border: 0;
-    border-radius: 10px;
-    background: transparent;
-}
-
 .detail-image-wrap {
     min-height: clamp(360px, 42vw, 560px);
     display: flex;
@@ -2147,16 +2135,6 @@ body::before {
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.06),
         0 20px 46px rgba(0, 0, 0, 0.34);
-}
-
-.detail-image {
-    width: 100%;
-    height: clamp(300px, 38vw, 500px);
-    display: block;
-    object-fit: contain;
-    object-position: center;
-    border-radius: 14px;
-    background: transparent;
 }
 
 .admin-thumb {
@@ -3358,11 +3336,6 @@ body::before {
     box-shadow: var(--site-shadow-soft);
 }
 
-.site-body .process-step span {
-    color: #FFFFFF;
-    background: #1D2430;
-}
-
 .site-body .advantage-card,
 .site-body .highlight-card {
     color: var(--site-text);
@@ -4377,11 +4350,6 @@ body::before {
 
 .site-body .appointment-page-section .panel-title-row {
     margin-bottom: 18px;
-}
-
-.site-body .appointment-page-section .panel-kicker {
-    color: #1746A2;
-    font-weight: 900;
 }
 
 .site-body .appointment-page-section .content-panel h2,
