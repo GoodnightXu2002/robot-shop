@@ -1,3 +1,6 @@
+import pytest
+
+from ai_assistant_service import build_ai_assistant_reply
 from models import Product
 
 
@@ -83,13 +86,40 @@ def test_cart_requires_login(client):
     assert "/login" in response.headers["Location"]
 
 
-def test_ai_assistant_without_api_key_returns_local_response(client):
+@pytest.mark.parametrize("message", [
+    "推荐一款餐饮服务机器人",
+    "推荐一款机器人",
+    "有什么机器人适合商场",
+    "推荐支持自动充电的机器人",
+])
+def test_ai_assistant_without_api_key_returns_local_response(client, monkeypatch, message):
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     response = client.post(
         "/api/ai-assistant/chat",
-        json={"message": "推荐一款餐饮服务机器人", "page_url": "/products"},
+        json={"message": message, "page_url": "/products"},
     )
 
     assert response.status_code == 200
     payload = response.get_json()
-    assert payload["reply"]
-    assert payload["source"] in {"local_rules", "error_fallback"}
+    assert payload["reply"].startswith("根据您的需求，我优先推荐以下已上架产品：")
+    assert payload["source"] == "local_rules"
+
+
+@pytest.mark.parametrize("message", [
+    "机器人无法正常充电",
+    "机器人充不上电",
+    "充电底座没有反应",
+    "机器人无法充电",
+    "机器人充电异常",
+    "配送机器人无法充电",
+    "Unitree G1 型号的机器人无法正常充电",
+])
+def test_ai_assistant_charging_fault_returns_local_troubleshooting(app, monkeypatch, message):
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    with app.test_request_context():
+        payload = build_ai_assistant_reply(message, "/appointments", None, [])
+
+    assert payload["source"] == "local_rules"
+    assert all(term in payload["reply"] for term in ("电源", "充电底座", "充电触点", "重新放置", "重启"))
+    assert "推荐" not in payload["reply"]
+    assert payload["actions"] == [{"text": "提交服务预约", "url": "/appointments"}]

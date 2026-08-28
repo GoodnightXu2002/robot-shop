@@ -110,6 +110,9 @@ def build_ai_assistant_reply(message, page_url, product, history):
     compact_message = message.lower()
     mentioned_product = product or find_mentioned_product(compact_message)
 
+    if is_charging_fault_intent(compact_message):
+        return build_after_sales_reply(charging_fault=True)
+
     database_reply = build_database_reply(message, compact_message)
     if database_reply:
         return database_reply
@@ -336,13 +339,23 @@ def build_product_detail_reply(product):
     }
 
 
-def build_after_sales_reply():
+def build_after_sales_reply(charging_fault=False):
+    reply = (
+        "售后服务可以进入“服务预约”页面提交申请，支持安装调试、故障维修、定期维护、软件升级和使用培训。"
+        "提交时填写服务类型、预约日期、时间段、地址和联系方式，管理员会在后台处理。\n"
+        "具体服务安排和处理结果以管理员确认及系统通知为准。"
+    )
+    if charging_fault:
+        reply = (
+            "机器人出现充电异常时，可以先按以下方向排查：\n"
+            "1. 检查电源与充电底座连接是否牢固。\n"
+            "2. 断开电源后，检查充电触点是否有异物，请勿自行拆机。\n"
+            "3. 尝试重新放置机器人，使充电触点对齐。\n"
+            "4. 按设备说明书尝试重启设备。\n"
+            "若仍无法充电，建议提交服务预约或联系售后。"
+        )
     return {
-        "reply": (
-            "售后服务可以进入“服务预约”页面提交申请，支持安装调试、故障维修、定期维护、软件升级和使用培训。"
-            "提交时填写服务类型、预约日期、时间段、地址和联系方式，管理员会在后台处理。\n"
-            "具体服务安排和处理结果以管理员确认及系统通知为准。"
-        ),
+        "reply": reply,
         "actions": [{"text": "提交服务预约", "url": "/appointments"}],
         "source": "local_rules",
     }
@@ -602,6 +615,15 @@ def is_order_status_intent(compact_message):
 
 def is_personal_appointment_intent(compact_message):
     return contains_any(compact_message, ("我的预约", "预约状态", "预约记录", "预约进度"))
+
+
+def is_charging_fault_intent(compact_message):
+    if contains_any(compact_message, ("充不上电", "充不了电", "充不进电", "不充电")):
+        return True
+    return "充电" in compact_message and contains_any(
+        compact_message,
+        ("无法", "不能", "不正常", "异常", "故障", "失败", "没反应", "没有反应", "无反应"),
+    )
 
 
 def is_after_sales_help_intent(compact_message):
