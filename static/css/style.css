@@ -4967,61 +4967,6 @@ body::before {
     max-width: 1160px;
 }
 
-.site-body .order-pay-alert,
-.site-body .order-paid-note {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 18px;
-    padding: 14px 16px;
-    border: 1px solid #BFD2F4;
-    border-radius: 6px;
-    color: #1E3A8A;
-    background: #F4F8FF;
-}
-
-.site-body .order-pay-alert strong,
-.site-body .order-paid-note strong {
-    color: #1746A2;
-    font-weight: 900;
-}
-
-.site-body .order-pay-alert span,
-.site-body .order-paid-note {
-    color: #334155;
-    font-weight: 600;
-}
-
-.site-body .order-pay-actions {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    margin-top: 18px;
-}
-
-.site-body .order-pay-btn {
-    min-width: 168px;
-    min-height: 42px;
-    color: #FFFFFF !important;
-    border-color: #12326F !important;
-    border-radius: 6px;
-    background: #123B8A !important;
-    font-weight: 900;
-    box-shadow: 0 10px 20px rgba(18, 59, 138, 0.2);
-}
-
-.site-body .order-pay-btn:hover,
-.site-body .order-pay-btn:focus {
-    color: #FFFFFF !important;
-    border-color: #0F2E68 !important;
-    background: #0F2E68 !important;
-}
-
-.site-body .order-pay-actions > span {
-    color: #64748B;
-    font-weight: 700;
-}
-
 .site-body .order-timeline {
     position: relative;
     display: grid;
@@ -5150,14 +5095,6 @@ body::before {
 .site-body .order-tip-card p {
     margin-bottom: 2px;
     color: #475569;
-}
-
-@media (max-width: 575.98px) {
-    .site-body .order-pay-actions {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 10px;
-    }
 }
 
 /* Orders list page */
