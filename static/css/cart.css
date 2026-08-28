@@ -212,6 +212,15 @@
 .site-body .cart-remove-form,
 .site-body .cart-checkout-form { margin: 0; }
 
+.site-body .cart-page .cart-quantity-form {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: max-content;
+    max-width: 100%;
+    white-space: nowrap;
+}
+
 .site-body .cart-quantity-control {
     display: inline-grid;
     grid-template-columns: 36px 48px 36px;

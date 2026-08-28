@@ -5653,15 +5653,6 @@ body::before {
 }
 
 /* Cart quantity controls */
-.site-body .cart-page .cart-quantity-form {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    width: max-content;
-    max-width: 100%;
-    white-space: nowrap;
-}
-
 .site-body .cart-page .cart-quantity-input {
     width: 74px;
     min-width: 64px;
