@@ -292,6 +292,7 @@
     gap: 0;
     margin-top: 0;
     padding: 24px 28px;
+    color: #334155;
 }
 
 .site-body .order-information-card h2,
@@ -369,6 +370,7 @@
     margin: 0 0 8px;
     color: #778398;
     font-size: 14px;
+    font-weight: 600;
     line-height: 1.9;
 }
 
