@@ -1103,6 +1103,7 @@
 
     .site-body .support-booking-panel .support-booking-form {
         display: flex;
+        flex-direction: column;
     }
 
     .site-body .support-diagnosis-form button {
