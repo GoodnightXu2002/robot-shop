@@ -5652,52 +5652,6 @@ body::before {
     }
 }
 
-/* Cart quantity controls */
-.site-body .cart-page .cart-quantity-input {
-    width: 74px;
-    min-width: 64px;
-    height: 34px;
-    color: #172033;
-    border-color: #C6D4E4;
-    border-radius: 6px;
-    background: #FFFFFF;
-    font-weight: 800;
-    text-align: center;
-}
-
-.site-body .cart-page .cart-quantity-input:focus {
-    color: #111827;
-    border-color: #2563EB;
-    box-shadow: 0 0 0 0.18rem rgba(37, 99, 235, 0.12);
-}
-
-.site-body .cart-page .cart-quantity-save {
-    min-width: 52px;
-    height: 34px;
-    padding: 5px 10px;
-    color: #174EA6;
-    border: 1px solid #B7C8E6;
-    border-radius: 6px;
-    background: #FFFFFF;
-    font-size: 13px;
-    font-weight: 900;
-    line-height: 1;
-    box-shadow: none;
-}
-
-.site-body .cart-page .cart-quantity-save:hover,
-.site-body .cart-page .cart-quantity-save:focus {
-    color: #FFFFFF;
-    border-color: #174EA6;
-    background: #174EA6;
-}
-
-.site-body .cart-page .cart-quantity-save:active {
-    color: #FFFFFF;
-    border-color: #0F3474;
-    background: #0F3474;
-}
-
 /* Public desktop header action icons */
 @media (min-width: 992px) {
     .site-body .site-navbar .public-header-actions {
